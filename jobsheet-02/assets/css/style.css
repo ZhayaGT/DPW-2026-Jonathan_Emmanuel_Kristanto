@@ -2,3 +2,25 @@ header {
     background-color: #1d5b8a;
     color: #fff;
 }
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", Arial, sans-serif;
+    line-height: 1.6;
+    color: #f300e3;
+    background-color: #9bbcff;
+}
+
+a {
+    color: #31f300;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
