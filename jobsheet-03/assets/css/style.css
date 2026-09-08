@@ -178,3 +178,8 @@ footer {
     color: #7a8794;
     font-size: 0.9rem;
 }
+
+@media (max-width: 768px) {
+    /* aturan CSS di sini HANYA berlaku
+       kalau lebar layar 768px atau lebih sempit */
+}

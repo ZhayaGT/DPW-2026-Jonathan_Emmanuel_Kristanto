@@ -41,7 +41,3 @@ jobsheet-02/
 
 Buka `index.html` langsung di browser (belum membutuhkan server).
 
-## 📌 Catatan
-
-- Halaman masih berupa struktur HTML statis; belum terhubung dengan CSS/JS maupun backend.
-- Navigasi antar halaman sudah saling terhubung melalui tautan relatif (`../` untuk naik satu level folder).
