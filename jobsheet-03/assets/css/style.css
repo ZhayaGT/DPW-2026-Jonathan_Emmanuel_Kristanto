@@ -194,8 +194,8 @@ footer {
 
 
 /* ===== Responsive Breakpoints ===== */
-
-@media (max-width: 768px) {
+/* 
+@media (max-width: 960px) {
     main section:nth-of-type(2) {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -234,7 +234,88 @@ footer {
     form select {
         max-width: 100%;
     }
+} */
+
+/* ===== Tabel Responsif ===== */
+/* .table-responsive {
+    overflow-x: auto;
 }
+
+@media (min-width: 1400px) {
+    main {
+        max-width: 2000;
+    }
+} */
+ 
+/* ===== Base Style / Mobile First (Layar < 480px) ===== */
+header {
+    position: relative;
+}
+
+.nav-toggle-label {
+    display: block;
+}
+
+header nav {
+    display: none;
+    width: 100%;
+    order: 3;
+    margin-top: 1rem;
+}
+
+.nav-toggle:checked ~ nav {
+    display: block;
+}
+
+header nav ul {
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+main section:nth-of-type(2) {
+    grid-template-columns: 1fr; 
+}
+
+form input,
+form select {
+    max-width: 100%;
+}
+
+
+/* ===== Tablet & Screen Lebih Besar (≥ 481px) ===== */
+@media (min-width: 481px) {
+    .nav-toggle-label {
+        display: none; 
+    }
+
+    header nav {
+        display: block; 
+        width: auto;
+        order: initial;
+        margin-top: 0;
+    }
+
+    header nav ul {
+        flex-direction: row;
+    }
+}
+
+
+/* ===== Laptop / Desktop Sedang (≥ 961px) ===== */
+@media (min-width: 961px) {
+    main section:nth-of-type(2) {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+
+/* ===== Large Desktop (≥ 1400px) ===== */
+@media (min-width: 1400px) {
+    main {
+        max-width: 2000px; 
+    }
+}
+
 
 /* ===== Tabel Responsif ===== */
 .table-responsive {
