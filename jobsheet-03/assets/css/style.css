@@ -217,5 +217,10 @@ footer {
     }
 }
 
+/* ===== Tabel Responsif ===== */
+.table-responsive {
+    overflow-x: auto;
+}
+
 
 
