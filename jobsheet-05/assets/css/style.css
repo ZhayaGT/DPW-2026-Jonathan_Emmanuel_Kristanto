@@ -179,22 +179,21 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Hamburger Menu */
-.nav-toggle {
-    display: none;
-}
+
 
 .nav-toggle-label {
     display: none;
     font-size: 1.6rem;
     color: #fff;
+    background: none;
+    border: nnone;
     cursor: pointer;
 }
 
 
 
 /* ===== Responsive Breakpoints ===== */
-/* 
+
 @media (max-width: 960px) {
     main section:nth-of-type(2) {
         grid-template-columns: repeat(2, 1fr);
@@ -234,10 +233,14 @@ footer {
     form select {
         max-width: 100%;
     }
-} */
+
+    header nav.nav-open {
+        display: block;
+    }
+}
 
 /* ===== Tabel Responsif ===== */
-/* .table-responsive {
+.table-responsive {
     overflow-x: auto;
 }
 
@@ -245,79 +248,24 @@ footer {
     main {
         max-width: 2000;
     }
-} */
- 
-/* ===== Base Style / Mobile First (Layar < 480px) ===== */
-header {
-    position: relative;
 }
 
-.nav-toggle-label {
+.error {
     display: block;
+    color: #d9534f;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
 }
 
-header nav {
-    display: none;
+/* ===== Kolom Pencarian ===== */
+.search-box {
+    margin-bottom: 1rem;
+}
+
+.search-box input {
     width: 100%;
-    order: 3;
-    margin-top: 1rem;
-}
-
-.nav-toggle:checked ~ nav {
-    display: block;
-}
-
-header nav ul {
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-main section:nth-of-type(2) {
-    grid-template-columns: 1fr; 
-}
-
-form input,
-form select {
-    max-width: 100%;
-}
-
-
-/* ===== Tablet & Screen Lebih Besar (≥ 481px) ===== */
-@media (min-width: 481px) {
-    .nav-toggle-label {
-        display: none; 
-    }
-
-    header nav {
-        display: block; 
-        width: auto;
-        order: initial;
-        margin-top: 0;
-    }
-
-    header nav ul {
-        flex-direction: row;
-    }
-}
-
-
-/* ===== Laptop / Desktop Sedang (≥ 961px) ===== */
-@media (min-width: 961px) {
-    main section:nth-of-type(2) {
-        grid-template-columns: repeat(2, 1fr); 
-    }
-}
-
-
-/* ===== Large Desktop (≥ 1400px) ===== */
-@media (min-width: 1400px) {
-    main {
-        max-width: 2000px; 
-    }
-}
-
-
-/* ===== Tabel Responsif ===== */
-.table-responsive {
-    overflow-x: auto;
+    max-width: 320px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #cdd4da;
+    border-radius: 4px;
 }
