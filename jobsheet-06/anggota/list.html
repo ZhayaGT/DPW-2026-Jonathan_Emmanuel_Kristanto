@@ -29,6 +29,7 @@
                 <label for="search-input">Cari Anggota</label>
                 <input type="text" id="search-input" placeholder="Ketik nomor anggota...">
             </div>
+            <p id="loading-indicator" style="display:none;">Memuat data...</p>
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -42,28 +43,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>A001</td>
-                            <td>Siti Aminah</td>
-                            <td>Malang</td>
-                            <td>0812xxxx</td>
-                            <td>2023-01-15</td>
-                            <td>
-                                <button type="button">Edit</button>
-                                <button type="button" class="btn-hapus">Hapus</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>A002</td>
-                            <td>Budi Santoso</td>
-                            <td>Batu</td>
-                            <td>0813xxxx</td>
-                            <td>2023-02-20</td>
-                            <td>
-                                <button type="button">Edit</button>
-                                <button type="button" class="btn-hapus">Hapus</button>
-                            </td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
@@ -75,5 +55,6 @@
     </footer>
 
     <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/annggota.js"></script>
 </body>
 </html>
