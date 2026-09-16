@@ -1,4 +1,4 @@
-# 📘 Laporan Pengerjaan Jobsheet 4 — SIMPUS-Mini
+# 📘 Laporan Pengerjaan Jobsheet 5 — SIMPUS-Mini
 
 ## 👤 Identitas Mahasiswa
 
@@ -11,19 +11,22 @@
 ## 📂 Struktur Proyek
 
 ```
-jobsheet-04/
+jobsheet-05/
 ├── index.html              # Beranda utama dengan navigasi & ringkasan statistik
 ├── assets/
-│   └── css/
-│       └── style.css       # Stylesheet global (responsive design)
+│   ├── css/
+│   │   └── style.css       # Ditambah gaya untuk error & search-box
+│   └── js/
+│       └── app.js          # BARU — seluruh interaktivitas jobsheet ini
 ├── buku/
-│   ├── list.html           # Tabel daftar buku
-│   └── tambah.html         # Form tambah buku
+│   ├── list.html           # Ditambah kolom pencarian + class btn-hapus
+│   └── tambah.html         # Ditambah id="form-tambah" untuk validasi
 ├── anggota/
-│   ├── list.html           # Tabel daftar anggota
-│   └── tambah.html         # Form tambah anggota
+│   ├── list.html           # Tabel daftar anggota + kolom pencarian
+│   └── tambah.html         # Form tambah anggota + validasi
 ├── docs/
-│   └── wireframe.md        # Rancangan fitur yang belum dikoding
+│   ├── wireframe.md        # Identik dengan jobsheet-04
+│   └── jawaban.md          # Jawaban soal jobsheet
 ├── Infografis.png          # Infografis proyek
 ├── Dokumentasi/
 │   └── PANDUAN.md          # Panduan proyek
@@ -32,71 +35,70 @@ jobsheet-04/
 
 ## 📝 Ringkasan Proyek
 
-Proyek **SIMPUS-Mini** (Sistem Perpustakaan Mini) merupakan implementasi dari materi Jobsheet 4 mata pelajaran Desain dan Pengembangan Web (DPW). Aplikasi ini dibangun sebagai sistem manajemen data perpustakaan sederhana yang terdiri dari halaman beranda, daftar buku, form tambah buku, daftar anggota, dan form tambah anggota. Keseluruhan proyek dikembangkan menggunakan HTML5 dan CSS3 dengan pendekatan **mobile-first** dan **responsive design**.
+Proyek **SIMPUS-Mini** (Sistem Perpustakaan Mini) pada Jobsheet 5 berfokus pada penambahan **interaktivitas JavaScript** ke atas struktur HTML dan CSS yang sudah dibangun sejak Jobsheet 1–4. Seluruh logika dipusatkan pada satu berkas baru, `assets/js/app.js`, yang menangani menu hamburger, konfirmasi hapus baris tabel, filter tabel real-time, serta validasi form. Halaman HTML dan stylesheet lama disesuaikan (id, class, dan gaya pendukung) agar dapat dikendalikan oleh JavaScript.
 
 ---
 
 ## 📜 Histori Pengerjaan
 
-### 1. Konsep Dasar CSS & Responsive Design
+### 1. Membuat Struktur Jobsheet 5
 
-Pada fase awal, kami membangun fondasi dengan konsep **CSS Grid** dan **Box-sizing**. File `style.css` dibuat dengan aturan `* { box-sizing: border-box; margin: 0; padding: 0; }` untuk memastikan konsistensi layout di semua elemen. Konsep **mobile-first** diterapkan sejak awal, di mana gaya dasar ditulis untuk layar kecil terlebih dahulu, kemudian ditingkatkan menggunakan media query untuk ukuran layar yang lebih besar.
+Struktur folder `jobsheet-05/` disiapkan sebagai kelanjutan jobsheet sebelumnya. Halaman HTML, stylesheet, dan dokumen disalin dari Jobsheet 4, lalu ditambahkan folder baru `assets/js/` beserta berkas `app.js` sebagai tempat seluruh interaktivitas. Pada tahap ini `app.js` masih kosong dan belum ditautkan ke halaman.
 
-### 2. Perubahan pada File HTML
+### 2. Apa yang Berubah di File HTML?
 
-File `index.html`, `anggota/list.html`, `anggota/tambah.html`, `buku/list.html`, dan `buku/tambah.html` diperbarui dengan struktur **semantic HTML5**. Penambahan elemen `header`, `nav`, `main`, `section`, `article`, dan `footer` memberikan makna semantik pada halaman. Navigasi dibuat dengan menu link ke setiap halaman, serta ditambahkan **checkbox hack** untuk mengaktifkan menu hamburger pada perangkat mobile.
+Beberapa penanda ditambahkan ke HTML agar elemen mudah dipilih oleh JavaScript:
 
-### 3. Reset & Gaya Dasar Body
+- **Menu hamburger**: checkbox hack (`<input type="checkbox" id="nav-toggle">` + `<label for="nav-toggle">`) diganti menjadi `<button type="button" id="nav-toggle-btn" class="nav-toggle-label" aria-label="Menu">&#9776;</button>`.
+- **Kolom pencarian**: halaman `buku/list.html` dan `anggota/list.html` ditambah `<div class="search-box">` berisi `<input id="search-input">`.
+- **Tombol hapus**: setiap tombol Hapus diberi class `btn-hapus` agar bisa dipilih dengan `querySelectorAll`.
+- **Form tambah**: form diberi penanda `id="form-tambah"` (pada `anggota/tambah.html`) dan `class="form-tambah"` (pada `buku/tambah.html`) sebagai target validasi.
 
-File `style.css` diberi reset global pada semua elemen (`*`) dengan `margin: 0` dan `padding: 0`. Gaya dasar `body` ditetapkan dengan font keluarga **Poppins**, `line-height: 1.6`, warna teks `#f300e3`, dan `background-color: #9bbcff`. Aturan ini menjadi fondasi visual seluruh proyek dan memastikan konsistensi tipografi di semua halaman.
+### 3. CSS Pendukung Fitur JavaScript
 
-### 4. Header & Navbar dengan Flexbox
+File `style.css` disesuaikan agar mendukung fitur baru:
 
-Header dan navigasi dibuat menggunakan **Flexbox**. `header` menggunakan `display: flex`, `align-items: center`, dan `justify-content: space-between` untuk mendistribusikan judul situs di kiri dan menu navigasi di kanan. Daftar navigasi (`nav ul`) menggunakan `display: flex` dengan `gap: 1.25rem` untuk jarak antar item menu. Warna background header ditetapkan ke `#8E7CD8` (ungu) untuk memberikan kesan profesional.
+- Aturan `.nav-toggle { display: none; }` dihapus karena checkbox hack sudah tidak dipakai.
+- `.nav-toggle-label` ditambah `background: none` dan `border: none` supaya tombol hamburger tampil rapi.
+- Blok media query yang sebelumnya dikomentari (`960px`, `480px`, dan `1400px`) diaktifkan kembali.
+- Ditambahkan `header nav.nav-open { display: block; }` sebagai kelas yang di-toggle oleh JavaScript.
+- Ditambahkan gaya `.error` untuk pesan validasi dan `.search-box` untuk kolom pencarian.
 
-### 5. Layout Main & Section (CSS Grid)
+### 4. JS: Menu Hamburger
 
-Konten utama (`main`) dibatasi lebar dengan `max-width: 1000px` dan `margin: 2rem auto` untuk sentrisasi. Setiap `section` diberi styling dengan `background-color: #fff`, `padding: 1.5rem`, `border-radius: 0.5rem`, dan `box-shadow` untuk efek kartu. Bagian kedua (`section:nth-of-type(2)`) menggunakan **CSS Grid** dengan `grid-template-columns: repeat(4, 1fr)` untuk menampilkan 4 kartu statistik berdampingan.
+Fungsi `initNavToggle()` dibuat di `app.js`. Fungsi ini mengambil tombol `#nav-toggle-btn` dan elemen `header nav`, lalu pada event `click` menjalankan `nav.classList.toggle("nav-open")`. Berkas `app.js` dipindahkan dari lokasi awal yang keliru (`assets/css/js/app.js`) ke lokasi yang benar, yaitu `assets/js/app.js`.
 
-### 6. Kartu Statistik dengan CSS Grid
+### 5. JS: Konfirmasi Hapus
 
-Bagian ringkasan pada halaman beranda ditampilkan sebagai 4 kartu statistik menggunakan CSS Grid. Setiap `article` di dalam section kedua berisi judul (misalnya "Total Buku", "Total Anggota", "Sedang Dipinjam", "Statistik") dan nilai numerik. Kartu diberi `background-color: #eef4fa`, `border-radius: 8px`, dan `text-align: center` untuk tampilan yang bersih. Nilai numerik ditampilkan dengan ukuran font `1.8rem` dan warna `#8E7CD8`.
+Fungsi `initHapusConfirm()` menambahkan listener `click` ke setiap tombol `.btn-hapus`. Saat diklik, baris terdekat dicari dengan `btn.closest("tr")`, judul diambil dari sel pertama (`querySelector("td")`), lalu ditampilkan dialog `confirm()`. Jika pengguna menyetujui, baris dihapus dengan `row.remove()`.
 
-### 7. Styling Tabel
+### 6. JS: Filter Tabel Real-Time
 
-Tabel pada halaman daftar buku dan daftar anggota diberi styling profesional. `thead` menggunakan `background-color: #8E7CD8` dengan teks putih, sedangkan `tbody tr:nth-child(even)` diberi `background-color: #f7f9fb` untuk efek **zebra striping**. Efek `hover` pada baris tabel mengubah background ke `#eef4fa`. Tombol aksi (Edit, Detail, Hapus) diberi warna berbeda: kuning (`#f0ad4e`) untuk edit dan merah (`#d9534f`) untuk hapus.
+Fungsi `initTableFilter()` memasang listener `keyup` pada input `#search-input`. Setiap kali pengguna mengetik, seluruh baris `tbody tr` dibandingkan dengan kata kunci, dan baris yang tidak cocok disembunyikan dengan `row.style.display = "none"`. Filter berjalan secara real-time tanpa memuat ulang halaman.
 
-### 8. Styling Form
+### 7. JS: Validasi Form
 
-Form pada halaman tambah buku dan tambah anggota diberi styling yang konsisten. Setiap `label` ditampilkan sebagai block dengan `font-weight: 600` dan `margin-bottom: 0.35rem`. Input, select, dan textarea menggunakan `width: 100%; max-width: 400px`, `padding: 0.55rem`, dan `border: 1px solid #cdd4da`. Tombol submit diberi warna merah muda (`#f03c69`) yang berubah menjadi biru tua (`#164869`) saat hover.
+Validasi form ditambahkan melalui tiga bagian:
 
-### 9. Footer
+- `tampilkanError(input, pesan)` — menyisipkan `<span class="error">` berisi pesan tepat setelah field.
+- `hapusError(input)` — menghapus pesan error yang sudah ada.
+- `initValidasiForm()` — menangani event `submit` dan mencegah pengiriman (`e.preventDefault()`) bila ada field yang tidak valid. Field yang divalidasi: judul/nama wajib diisi, pengarang wajib diisi, tahun terbit 1900–2026, dan stok tidak negatif.
 
-Footer pada setiap halaman diberi styling dengan `text-align: center`, `padding: 1.25rem`, dan warna teks abu-abu (`#7a8794`). Footer berisi hak cipta dan informasi versi proyek.
+### 8. Rangkuman & Latihan Lanjutan
 
-### 10. Latihan Tambahan
+Tahap akhir berisi penyempurnaan dan latihan lanjutan:
 
-Pada fase ini dilakukan penyesuaian visual melalui latihan tambahan: **mengubah skema warna** pada body dan elemen dasar, **menambahkan kolom keempat** pada tabel (misalnya kolom untuk detail), dan **membuat tombol ketiga** dengan warna berbeda. Perubahan ini meningkatkan variasi dan kelengkapan fitur antarmuka.
-
-### 11. Table-Responsive & Menu Hamburger
-
-Fitur **table-responsive** diterapkan dengan kelas `.table-responsive` yang menggunakan `overflow-x: auto` agar tabel bisa digulir secara horizontal pada layar kecil. **Menu hamburger** diimplementasikan menggunakan **Checkbox Hack** — checkbox tersembunyi (`#nav-toggle`) dikombinasikan dengan label (`nav-toggle-label`) dan aturan CSS `.nav-toggle:checked ~ nav { display: block; }`. Pada layar mobile, navigasi disembunyikan secara default dan hanya muncul ketika hamburger icon diklik.
-
-### 12. Media Query & Breakpoint
-
-Pendekatan **mobile-first** diterapkan secara penuh pada file `style.css`. Breakpoint yang digunakan:
-- **≥ 481px**: Navigasi ditampilkan sebagai baris horizontal (hamburger hilang)
-- **≥ 961px**: Grid kartu statistik berubah menjadi 2 kolom
-- **≥ 1400px**: Lebar maksimum main diperluas hingga 2000px
-
-Semua media query menggunakan `min-width` untuk memastikan gaya dasar (mobile) tetap berlaku dan ditimpa hanya saat ukuran layar memenuhi syarat.
-
-### 13. Rangkuman & Latihan Lanjutan
-
-Fase terakhir mencakup **pengumpulan dan ringkasan** seluruh fitur yang telah dibangun. Hasil akhir meliputi: 5 halaman HTML (beranda, daftar buku, tambah buku, daftar anggota, tambah anggota), 1 file CSS dengan lebih dari 320 baris kode, serta fitur lengkap seperti navigasi responsif, tabel responsif, form validasi, dan grid layout. Proyek ini mendemonstrasikan penguasaan konsep CSS modern termasuk Flexbox, Grid, Responsive Design, dan Mobile-First Approach.
+- **Inisialisasi terpusat** — pemanggilan `initNavToggle()`, `initHapusConfirm()`, `initTableFilter()`, dan `initValidasiForm()` dipindahkan ke satu listener `DOMContentLoaded`, sehingga blok `<script>` inline di setiap halaman dihapus.
+- **Perbaikan path script** — halaman di dalam folder `buku/` dan `anggota/` memakai `../assets/js/app.js` (sebelumnya keliru `assets/js/app.js`).
+- **Animasi menu** — pada layar mobile `header nav` memakai `max-height: 0`, `overflow: hidden`, dan `transition: max-height 0.35s ease`, sedangkan `.nav-open` menaikkan `max-height` sehingga menu terbuka/tertutup dengan efek geser halus.
+- **Filter satu kolom** — pencarian dibatasi hanya pada kolom Judul dengan `row.querySelector("td")`, bukan seluruh teks baris.
+- **Counter baris** — fungsi `updateCounter()` menampilkan teks "Menampilkan X dari Y buku/anggota" di atas tabel dan diperbarui setiap kali filter atau hapus dijalankan.
+- **Refactor validasi** — aturan validasi disimpan dalam array `aturanValidasi` (berisi `selector`, `cek`, dan `pesan`) lalu dijalankan dengan `forEach`, menggantikan blok `if` terpisah per field.
+- **Validasi ISBN** — field ISBN yang tidak wajib diisi (sesuai jobsheet-01 §4.4) kini divalidasi agar hanya menerima angka dan tanda hubung melalui pola `/^[0-9-]+$/`.
+- **Perbaikan label pencarian anggota** — teks "Cari Judul Buku" pada halaman anggota diperbaiki menjadi "Cari Anggota".
 
 ---
 
 ## ✅ Kesimpulan
 
-Proyek SIMPUS-Mini berhasil diimplementasikan sebagai aplikasi manajemen perpustakaan berbasis web yang **responsif** dan **mobile-first**. Seluruh proses pengerjaan dilakukan secara bertahap mulai dari fondasi CSS dasar, struktur HTML semantik, styling dengan Flexbox dan Grid, hingga fitur responsif lengkap dengan media query dan hamburger menu. Proyek ini mencerminkan pemahaman komprehensif terhadap konsep desain web modern.
+Jobsheet 5 berhasil menambahkan lapisan **interaktivitas JavaScript** pada proyek SIMPUS-Mini. Empat fitur utama — menu hamburger, konfirmasi hapus, filter tabel real-time, dan validasi form — diimplementasikan dalam satu berkas `app.js` yang diinisialisasi terpusat lewat `DOMContentLoaded`. Penyempurnaan akhir berupa animasi CSS, counter baris, refactor validasi berbasis array, dan validasi ISBN menunjukkan penerapan konsep manipulasi DOM, event handling, serta pemisahan tanggung jawab antara struktur (HTML), tampilan (CSS), dan perilaku (JavaScript).
