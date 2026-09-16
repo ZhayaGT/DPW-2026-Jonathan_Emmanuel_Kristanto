@@ -210,14 +210,16 @@ footer {
     }
 
     header nav {
-        display: none;
+        max-height: 0;
+        overflow: hidden;
         width: 100%;
         order: 3;
-        margin-top: 1rem;
+        transition: max-height 0.35s ease;
     }
 
-    .nav-toggle:checked ~ nav {
-        display: block;
+    header nav.nav-open {
+        max-height: 500px;
+        margin-top: 1rem;
     }
 
     header nav ul {
@@ -232,10 +234,6 @@ footer {
     form input,
     form select {
         max-width: 100%;
-    }
-
-    header nav.nav-open {
-        display: block;
     }
 }
 
@@ -255,6 +253,12 @@ footer {
     color: #d9534f;
     font-size: 0.85rem;
     margin-top: 0.25rem;
+}
+
+.info-baris {
+    margin-bottom: 0.5rem;
+    color: #55677a;
+    font-size: 0.9rem;
 }
 
 /* ===== Kolom Pencarian ===== */
