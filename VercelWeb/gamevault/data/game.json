@@ -1,0 +1,12 @@
+[
+    { "id": 1, "judul": "Genshin Impact", "genre": "RPG", "platform": "PC", "tahun": 2020, "rating": 4.5, "developer": "HoYoverse", "deskripsi": "Open-world action RPG dengan sistem elemental." },
+    { "id": 2, "judul": "Valorant", "genre": "FPS", "platform": "PC", "tahun": 2020, "rating": 4.0, "developer": "Riot Games", "deskripsi": "Tactical shooter 5v5 dengan agent berabilitas unik." },
+    { "id": 3, "judul": "Mobile Legends", "genre": "MOBA", "platform": "Mobile", "tahun": 2016, "rating": 3.5, "developer": "Moonton", "deskripsi": "MOBA 5v5 untuk perangkat mobile." },
+    { "id": 4, "judul": "Elden Ring", "genre": "RPG", "platform": "PlayStation", "tahun": 2022, "rating": 5.0, "developer": "FromSoftware", "deskripsi": "Action RPG open-world dengan tingkat kesulitan tinggi." },
+    { "id": 5, "judul": "Stardew Valley", "genre": "Indie", "platform": "PC", "tahun": 2016, "rating": 4.5, "developer": "ConcernedApe", "deskripsi": "Simulasi bertani dan kehidupan desa." },
+    { "id": 6, "judul": "Civilization VI", "genre": "Strategy", "platform": "PC", "tahun": 2016, "rating": 4.0, "developer": "Firaxis Games", "deskripsi": "Strategy turn-based membangun peradaban." },
+    { "id": 7, "judul": "Zelda: Breath of the Wild", "genre": "Adventure", "platform": "Switch", "tahun": 2017, "rating": 5.0, "developer": "Nintendo", "deskripsi": "Petualangan open-world dengan eksplorasi bebas." },
+    { "id": 8, "judul": "Hades", "genre": "Indie", "platform": "PC", "tahun": 2020, "rating": 4.5, "developer": "Supergiant Games", "deskripsi": "Roguelike action dengan cerita mitologi Yunani." },
+    { "id": 9, "judul": "Apex Legends", "genre": "FPS", "platform": "PC", "tahun": 2019, "rating": 4.0, "developer": "Respawn Entertainment", "deskripsi": "Battle royale hero shooter." },
+    { "id": 10, "judul": "Age of Empires IV", "genre": "Strategy", "platform": "PC", "tahun": 2021, "rating": 4.0, "developer": "Relic Entertainment", "deskripsi": "Strategy real-time bertema sejarah." }
+]

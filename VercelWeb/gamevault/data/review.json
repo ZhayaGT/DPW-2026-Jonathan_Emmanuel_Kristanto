@@ -1,0 +1,7 @@
+[
+    { "id": 1, "gameId": 4, "penulis": "Zhaya", "rating": 5, "komentar": "Bosnya susah tapi puas saat akhirnya menang.", "tanggal": "2026-01-12" },
+    { "id": 2, "gameId": 5, "penulis": "Rani", "rating": 5, "komentar": "Santai, cocok dimainkan sambil santai sore.", "tanggal": "2026-02-03" },
+    { "id": 3, "gameId": 1, "penulis": "Bagas", "rating": 4, "komentar": "Grafis bagus, tapi grinding artefak bikin capek.", "tanggal": "2026-02-18" },
+    { "id": 4, "gameId": 7, "penulis": "Zhaya", "rating": 5, "komentar": "Eksplorasi paling bebas yang pernah saya mainkan.", "tanggal": "2026-03-05" },
+    { "id": 5, "gameId": 8, "penulis": "Dimas", "rating": 4, "komentar": "Setiap mati selalu pengen coba sekali lagi.", "tanggal": "2026-03-21" }
+]
