@@ -9,25 +9,24 @@
 <body>
     <header>
         <h1>GameVault</h1>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="nav-toggle-label">&#9776;</label> 
         <nav>
             <ul>
-                <li><a href="index.html">Beranda</a></li>
-                <li><a href="game/list.html">Daftar Game</a></li>
-                <li><a href="game/tambah.html">Tambah Game</a></li>
-                <li><a href="review/list.html">Daftar Review</a></li>
-                <li><a href="review/tambah.html">Tambah Review</a></li>
+                <li><a href="../index.html">Beranda</a></li>
+                <li><a href="list.html">Daftar Game</a></li>
+                <li><a href="tambah.html">Tambah Game</a></li>
+                <li><a href="../review/list.html">Daftar Review</a></li>
+                <li><a href="../review/tambah.html">Tambah Review</a></li>
             </ul>
         </nav>
+        <button type="button" id="nav-toggle-btn" class="nav-toggle-label" aria-label="Menu">&#9776;</button>
     </header>
 
     <main>
         <section>
             <h2>Daftar Game</h2>
 
-            <div class kontrol>
-                <input type="search" id="cari-gane" placeholder="Cari juduk game...">
+            <div class="kontrol">
+                <input type="search" id="cari-game" placeholder="Cari judul game...">
 
                 <select id="filter-genre">
                     <option value="">Semua Genre</option>
@@ -71,6 +70,7 @@
         <p>&copy; 2026 GameVault &mdash; ZhayaGTs</p>
     </footer>
 
+    <script src="../assets/js/app.js"></script>
     <script src="../assets/js/data.js"></script>
     <script src="../assets/js/game.js"></script>
 

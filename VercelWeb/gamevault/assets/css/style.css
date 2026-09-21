@@ -76,27 +76,27 @@ header nav a:hover {
 
 /* Hamburger */
 
-.nav-toggle {
-    display: none;
-}
-
 .nav-toggle-label {
     display: block;
     font-size: 1.6rem;
     line-height: 1;
     color: var(--accent-soft);
+    background: none;
+    border: none;
     cursor: pointer;
 }
 
 header nav {
-    display: none;
     width: 100%;
     order: 3;
-    margin-top: 1rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
 }
 
-.nav-toggle:checked ~ nav {
-    display: block;
+header nav.nav-open {
+    max-height: 500px;
+    margin-top: 1rem;
 }
 
 header nav ul {
@@ -108,7 +108,7 @@ header nav ul {
 main {
     max-width: 1100px;
     margin: 2rem auto;
-    padding: 0 1.5 rem;
+    padding: 0 1.5rem;
 }
 
 /* Card */
@@ -132,7 +132,7 @@ section h2 {
     text-align: center;
     background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.25), transparent 60%), var(--surface);
     border-color: var(--accent);
-    box-shadow: 0 ,0 ,40px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
 }
 
 .hero h2 {
@@ -173,7 +173,7 @@ section h2 {
 }
 
 .ringkasan h2 {
-    grid-column: 1 /-1;
+    grid-column: 1 / -1;
 }
 
 .ringkasan article {
@@ -195,4 +195,23 @@ section h2 {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--accent-soft);
+}
+
+/* ===== Tablet & Screen Lebih Besar (>= 481px) ===== */
+@media (min-width: 481px) {
+    .nav-toggle-label {
+        display: none;
+    }
+
+    header nav {
+        width: auto;
+        order: initial;
+        max-height: none;
+        overflow: visible;
+        margin-top: 0;
+    }
+
+    header nav ul {
+        flex-direction: row;
+    }
 }
