@@ -63,3 +63,136 @@ header nav ul {
     display: flex;
     gap: 1.25rem;
 }
+
+header nav a {
+    color: var(--text);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+header nav a:hover {
+    color: var(--accent-soft);
+} 
+
+/* Hamburger */
+
+.nav-toggle {
+    display: none;
+}
+
+.nav-toggle-label {
+    display: block;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--accent-soft);
+    cursor: pointer;
+}
+
+header nav {
+    display: none;
+    width: 100%;
+    order: 3;
+    margin-top: 1rem;
+}
+
+.nav-toggle:checked ~ nav {
+    display: block;
+}
+
+header nav ul {
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* main */
+main {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1.5 rem;
+}
+
+/* Card */
+section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+section h2 {
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    color: var(--white);
+}
+
+/* Hero */
+.hero {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.25), transparent 60%), var(--surface);
+    border-color: var(--accent);
+    box-shadow: 0 ,0 ,40px rgba(139, 92, 246, 0.15);
+}
+
+.hero h2 {
+    font-size: 1.8rem;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+}
+
+.hero p {
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+    color: var(--muted);
+}
+
+/* Tombol Utama */
+
+.btn-utama {
+    display: inline-block;
+    padding: 0.7rem 1.5rem;
+    background-color: var(--accent);
+    color: var(--white);
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-utama:hover {
+    background-color: var(--accent-soft);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* Grid Kartu */
+.ringkasan {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.ringkasan h2 {
+    grid-column: 1 /-1;
+}
+
+.ringkasan article {
+    padding: 1.25rem;
+    text-align: center;
+    background-color: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.ringkasan article h3 {
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.ringkasan article p {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-soft);
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault | Daftar Game</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>GameVault</h1>
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="nav-toggle-label">&#9776;</label> 
+        <nav>
+            <ul>
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="game/list.html">Daftar Game</a></li>
+                <li><a href="game/tambah.html">Tambah Game</a></li>
+                <li><a href="review/list.html">Daftar Review</a></li>
+                <li><a href="review/tambah.html">Tambah Review</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Daftar Game</h2>
+
+            <div class kontrol>
+                <input type="search" id="cari-gane" placeholder="Cari juduk game...">
+
+                <select id="filter-genre">
+                    <option value="">Semua Genre</option>
+                    <option value="RPG">RPG</option>
+                    <option value="FPS">FPS</option>
+                    <option value="MOBA">MOBA</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Strategy">Strategy</option>
+                    <option value="Indie">Indie</option>
+                </select>
+                <a class="btn-utama" href="tambah.html">+ Tambah</a>
+            </div>
+
+            <div class="table-responsive">
+                <table id="tabel-game">
+                    <thead>
+                        <tr>
+                            <th>Judul</th>
+                            <th>Genre</th>
+                            <th>Platform</th>
+                            <th>Tahun</th>
+                            <th>Rating</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="modal" id="modal-detail">
+            <div class="modal-isi">
+                <h3 id="modal-judul">Detail Game</h3>
+                <dl id="modal-body"></dl>
+                <button type="button" class="btn-hapus" id="modal-tutup">Tutup</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 GameVault &mdash; ZhayaGTs</p>
+    </footer>
+
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/game.js"></script>
+
+</body>
+</html>
