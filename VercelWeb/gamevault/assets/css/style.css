@@ -1,0 +1,65 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg:          #0B0B0F;
+    --surface:     #15151C;
+    --surface-2:   #1E1E27;
+    --border:      #2A2A36;
+    --accent:      #8B5CF6;
+    --accent-soft: #A78BFA;
+    --text:        #ECECF1;
+    --muted:       #9A9AA8;
+    --white:       #FFFFFF;
+    --danger:      #EF4444;
+    --warn:        #F59E0B;
+    --ok:          #22C55E;
+}
+
+body {
+    font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    line-height: 1.6;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+/* Link Dasar */
+a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--accent-soft);
+}
+
+/* Header */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 1rem 1.5rem;
+    background-color: var(--surface);
+    border-bottom: 2px solid var(--accent);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--accent-soft);
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.25rem;
+}
