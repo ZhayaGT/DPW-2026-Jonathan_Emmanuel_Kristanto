@@ -197,7 +197,7 @@ section h2 {
     color: var(--accent-soft);
 }
 
-/* ===== Modal (sementara, gaya lengkap menyusul) ===== */
+/* ===== Modal ===== */
 .modal {
     display: none;
     position: fixed;
@@ -222,25 +222,6 @@ section h2 {
     background-color: var(--surface);
     border: 1px solid var(--accent);
     border-radius: 12px;
-}
-
-/* ===== Tablet & Screen Lebih Besar (>= 481px) ===== */
-@media (min-width: 481px) {
-    .nav-toggle-label {
-        display: none;
-    }
-
-    header nav {
-        width: auto;
-        order: initial;
-        max-height: none;
-        overflow: visible;
-        margin-top: 0;
-    }
-
-    header nav ul {
-        flex-direction: row;
-    }
 }
 
 /* =========== Form ========= */
@@ -290,8 +271,226 @@ section h2 {
     color: var(--danger);
 }
 
+.btn-tutup {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    margin-left: 0.5rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
 .btn-tutup:hover {
     color: var(--text);
     border-color: var(--accent);
+}
+
+/* ===== Bar Kontrol (Pencarian & Filter) ===== */
+.kontrol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.kontrol input,
+.kontrol select {
+    flex: 1;
+    min-width: 160px;
+    padding: 0.6rem 0.8rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--text);
+    background-color: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.kontrol input::placeholder {
+    color: var(--muted);
+}
+
+.kontrol input:focus,
+.kontrol select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.kontrol .btn-utama {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+/* ===== Tabel ===== */
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+th,
+td {
+    padding: 0.7rem 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+thead {
+    background-color: var(--surface-2);
+}
+
+th {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent-soft);
+    white-space: nowrap;
+}
+
+tbody tr:nth-child(even) {
+    background-color: rgba(139, 92, 246, 0.04);
+}
+
+tbody tr:hover {
+    background-color: rgba(139, 92, 246, 0.12);
+}
+
+/* ===== Badge Genre ===== */
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-soft);
+    background-color: rgba(139, 92, 246, 0.15);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+}
+
+/* ===== Rating Bintang ===== */
+.bintang {
+    color: var(--warn);
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+
+.bintang .kosong {
+    color: var(--border);
+}
+
+/* ===== Tombol Aksi Tabel ===== */
+td button {
+    padding: 0.35rem 0.7rem;
+    margin-right: 0.3rem;
+    margin-bottom: 0.2rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+td button:hover {
+    opacity: 0.8;
+}
+
+.btn-detail {
+    background-color: var(--accent);
+}
+
+.btn-edit {
+    background-color: var(--warn);
+}
+
+.btn-hapus {
+    background-color: var(--danger);
+}
+
+/* ===== Info Baris ===== */
+.info-baris {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+/* ===== Modal: isi ===== */
+.modal-isi h3 {
+    margin-bottom: 0.75rem;
+    color: var(--accent-soft);
+}
+
+.modal-isi dl {
+    margin-bottom: 1.25rem;
+}
+
+.modal-isi dt {
+    margin-top: 0.6rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+}
+
+.modal-isi dd {
+    color: var(--text);
+}
+
+/* ===== Footer ===== */
+footer {
+    padding: 1.25rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+}
+
+/* ===== Tablet & Screen Lebih Besar (>= 481px) ===== */
+@media (min-width: 481px) {
+    .nav-toggle-label {
+        display: none;
+    }
+
+    header nav {
+        width: auto;
+        order: initial;
+        max-height: none;
+        overflow: visible;
+        margin-top: 0;
+    }
+
+    header nav ul {
+        flex-direction: row;
+    }
+
+    .ringkasan {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    td button {
+        margin-bottom: 0;
+    }
+}
+
+/* ===== Laptop / Desktop Sedang (>= 961px) ===== */
+@media (min-width: 961px) {
+    .ringkasan {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ===== Large Desktop (>= 1400px) ===== */
+@media (min-width: 1400px) {
+    main {
+        max-width: 1400px;
+    }
 }
 
