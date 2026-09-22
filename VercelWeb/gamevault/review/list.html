@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GameVault | Daftar Review</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>GameVault</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Beranda</a></li>
+                <li><a href="../game/list.html">Daftar Game</a></li>
+                <li><a href="../game/tambah.html">Tambah Game</a></li>
+                <li><a href="list.html">Daftar Review</a></li>
+                <li><a href="tambah.html">Tambah Review</a></li>
+            </ul>
+        </nav>
+        <button type="button" id="nav-toggle-btn" class="nav-toggle-label" aria-label="Menu">&#9776;</button>
+    </header>
+
+    <main>
+        <section>
+            <h2>Daftar Review</h2>
+
+            <div class="kontrol">
+                <input type="search" id="cari-review" placeholder="Cari judul game...">
+                <a class="btn-utama" href="tambah.html">+ Tambah Review</a>
+            </div>
+
+            <p id="loading-indicator" style="display:none;">Memuat data...</p>
+
+            <div class="table-responsive">
+                <table id="tabel-review">
+                    <thead>
+                        <tr>
+                            <th>Game</th>
+                            <th>Penulis</th>
+                            <th>Rating</th>
+                            <th>Tanggal</th>
+                            <th>Komentar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="modal" id="modal-detail">
+            <div class="modal-isi">
+                <h3 id="modal-judul">Detail Review</h3>
+                <dl id="modal-body"></dl>
+                <button type="button" class="btn-tutup" id="modal-tutup">Tutup</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 GameVault &mdash; ZhayaGTs</p>
+    </footer>
+
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/review.js"></script>
+</body>
+</html>

@@ -148,19 +148,39 @@ async function initSimpanGame() {
     const form = document.getElementById("form-tambah");
     if (!form) return;
 
-    form.addEventListener("submit", async function (e) {
+    const idEdit = new URLSearchParams(window.location.search).get("id");
+    let daftar = ambilLokal(KEY_GAMES);
+
+    if (!daftar) {
+        const res = await fetch("../data/game.json");
+        daftar = await res.json();
+    }
+
+    if (idEdit) {
+        const game = daftar.find(function (item) {
+            return item.id === Number(idEdit);
+        });
+
+        if (game) {
+            form.judul.value = game.judul;
+            form.developer.value = game.developer;
+            form.genre.value = game.genre;
+            form.platform.value = game.platform;
+            form.tahun.value = game.tahun;
+            form.rating.value = game.rating;
+            form.deskripsi.value = game.deskripsi;
+
+            const h2 = document.getElementById("judul-halaman");
+            if (h2) h2.textContent = "Edit Game";
+        }
+    }
+
+    form.addEventListener("submit", function (e) {
         e.preventDefault();
 
         if (form.querySelector(".error")) return;
 
-        let daftar = ambilLokal(KEY_GAMES);
-        if (!daftar) {
-            const res = await fetch("../data/game.json");
-            daftar = await res.json();
-        }
-
-        const gameBaru = {
-            id: buatId(daftar),
+        const dataBaru = {
             judul: form.judul.value.trim(),
             developer: form.developer.value.trim(),
             genre: form.genre.value,
@@ -170,10 +190,31 @@ async function initSimpanGame() {
             deskripsi: form.deskripsi.value.trim()
         };
 
-        daftar.push(gameBaru);
-        simpanLokal(KEY_GAMES, daftar);
+        if (idEdit) {
+            const posisi = daftar.findIndex(function (item) {
+                return item.id === Number(idEdit);
+            });
+            if (posisi !== -1) {
+                daftar[posisi] = Object.assign({ id: Number(idEdit) }, dataBaru);
+            }
+        } else {
+            daftar.push(Object.assign({ id: buatId(daftar) }, dataBaru));
+        }
 
+        simpanLokal(KEY_GAMES, daftar);
         window.location.href = "list.html";
+    });
+}
+
+function initEditGame() {
+    document.addEventListener("click", function (e) {
+        const btn = e.target.closest(".btn-edit");
+        if (!btn) return;
+
+        const row = btn.closest("tr");
+        if (!row) return;
+
+        window.location.href = "tambah.html?id=" + row.dataset.id;
     });
 }
 
@@ -182,4 +223,5 @@ document.addEventListener("DOMContentLoaded", function () {
     initModalDetailGame();
     initHapusGame();
     initSimpanGame();
+    initEditGame();
 });

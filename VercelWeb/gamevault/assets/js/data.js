@@ -25,3 +25,22 @@ function buatId(daftar) {
         return item.id;
     })) + 1;
 }
+
+function teksAman(nilai) {
+    return String(nilai)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+function bintang(nilai) {
+    let isi = "";
+    for (let i = 1; i <= 5; i++) {
+        if (i <= Math.round(nilai)) {
+            isi += "★";
+        } else {
+            isi += '<span class="kosong">★</span>';
+        }
+    }
+    return '<span class="bintang">' + isi + "</span> " + Number(nilai).toFixed(1);
+}
