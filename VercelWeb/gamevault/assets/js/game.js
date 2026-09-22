@@ -144,8 +144,42 @@ function initHapusGame() {
     });
 }
 
+async function initSimpanGame() {
+    const form = document.getElementById("form-tambah");
+    if (!form) return;
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        if (form.querySelector(".error")) return;
+
+        let daftar = ambilLokal(KEY_GAMES);
+        if (!daftar) {
+            const res = await fetch("../data/game.json");
+            daftar = await res.json();
+        }
+
+        const gameBaru = {
+            id: buatId(daftar),
+            judul: form.judul.value.trim(),
+            developer: form.developer.value.trim(),
+            genre: form.genre.value,
+            platform: form.platform.value,
+            tahun: parseInt(form.tahun.value, 10),
+            rating: parseFloat(form.rating.value),
+            deskripsi: form.deskripsi.value.trim()
+        };
+
+        daftar.push(gameBaru);
+        simpanLokal(KEY_GAMES, daftar);
+
+        window.location.href = "list.html";
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     muatDaftarGame();
     initModalDetailGame();
     initHapusGame();
+    initSimpanGame();
 });

@@ -242,3 +242,55 @@ section h2 {
         flex-direction: row;
     }
 }
+
+/* =========== Form ========= */
+.form-grup {
+    margin-bottom: 1rem;
+}
+
+.form-grup label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-grup input,
+.form-grup select,
+.form-grup textarea {
+    width: 100%;
+    max-width: 420px;
+    padding: 0.6rem 0.8rem;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text);
+    background-color: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.form-grup textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.form-grup input:focus,
+.form-grup select:focus,
+.form-grup textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.error {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.85rem;
+    color: var(--danger);
+}
+
+.btn-tutup:hover {
+    color: var(--text);
+    border-color: var(--accent);
+}
