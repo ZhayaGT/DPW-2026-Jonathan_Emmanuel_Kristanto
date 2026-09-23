@@ -1,28 +1,7 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIMPUS-Mini | Beranda</title>
-</head>
-
-<body>
-    <header>
-        <h1>SIMPUS-Mini</h1>
-        <nav>
-            <ul>
-                <li><a href="index.php">Beranda</a></li>
-                <li><a href="buku/list.php">Daftar Buku</a></li>
-                <li><a href="buku/tambah.php">Tambah Buku</a></li>
-                <li><a href="anggota/list.php">Daftar Anggota</a></li>
-                <li><a href="anggota/tambah.php">Tambah Anggota</a></li>
-            </ul>
-        </nav>
-        <button type="button" id="nav-toggle-btn" class="nav-toggle-label" aria-label="Menu">&#9776;</button>
-    </header>
-
-    <main>
+<?php
+$page_title = "Beranda";
+include __DIR__ . '/includes/header.php';
+?>
         <section>
             <h2>Selamat Datang di Sistem Perpustakaan Mini</h2>
             <div class="table-responsive"><p>Aplikasi sederhana untuk mengelola data buku dan anggota perpustakaan.</p></div>
@@ -47,12 +26,4 @@
                 <p>67</p>
             </article>
         </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 SIMPUS-Mini &mdash; Jobsheet 7</p>
-    </footer>
-    <script src="assets/js/app.js"></script>
-</body>
-
-</html>
+<?php include __DIR__ . '/includes/footer.php'; ?>
