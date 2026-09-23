@@ -31,14 +31,13 @@
             </div>
             <p id="loading-indicator" style="display:none;">Memuat data...</p>
             <div class="table-responsive">
-                <table>
+                <table id="tabel-data" data-sumber="../data/anggota.json" data-kolom="no_anggota,nama,alamat,no_hp">
                     <thead>
                         <tr>
                             <th>No. Anggota</th>
                             <th>Nama</th>
                             <th>Alamat</th>
                             <th>No. HP</th>
-                            <th>Tanggal Bergabung</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -55,6 +54,6 @@
     </footer>
 
     <script src="../assets/js/app.js"></script>
-    <script src="../assets/js/anggota.js"></script>
+    <script src="../assets/js/tabel.js"></script>
 </body>
 </html>
