@@ -1,4 +1,4 @@
-# 📘 Laporan Pengerjaan Jobsheet 5 — SIMPUS-Mini
+# 📘 Laporan Pengerjaan Jobsheet 6 — SIMPUS-Mini
 
 ## 👤 Identitas Mahasiswa
 
@@ -11,18 +11,22 @@
 ## 📂 Struktur Proyek
 
 ```
-jobsheet-05/
+jobsheet-06/
 ├── index.html              # Beranda utama dengan navigasi & ringkasan statistik
 ├── assets/
 │   ├── css/
-│   │   └── style.css       # Ditambah gaya untuk error & search-box
+│   │   └── style.css       # Gaya tabel, pencarian, validasi, dan tombol muat ulang
 │   └── js/
-│       └── app.js          # BARU — seluruh interaktivitas jobsheet ini
+│       ├── app.js          # Menu hamburger, hapus, filter, counter, validasi form
+│       └── tabel.js        # BARU — fetch JSON + render tabel (fungsi generik)
+├── data/
+│   ├── buku.json           # Sumber data buku (10 objek, termasuk kategori)
+│   └── anggota.json        # Sumber data anggota (4 objek)
 ├── buku/
-│   ├── list.html           # Ditambah kolom pencarian + class btn-hapus
-│   └── tambah.html         # Ditambah id="form-tambah" untuk validasi
+│   ├── list.html           # Tabel dirender dari JSON + tombol Muat Ulang
+│   └── tambah.html         # Form tambah buku + validasi
 ├── anggota/
-│   ├── list.html           # Tabel daftar anggota + kolom pencarian
+│   ├── list.html           # Tabel dirender dari JSON
 │   └── tambah.html         # Form tambah anggota + validasi
 ├── docs/
 │   ├── wireframe.md        # Identik dengan jobsheet-04
@@ -35,70 +39,56 @@ jobsheet-05/
 
 ## 📝 Ringkasan Proyek
 
-Proyek **SIMPUS-Mini** (Sistem Perpustakaan Mini) pada Jobsheet 5 berfokus pada penambahan **interaktivitas JavaScript** ke atas struktur HTML dan CSS yang sudah dibangun sejak Jobsheet 1–4. Seluruh logika dipusatkan pada satu berkas baru, `assets/js/app.js`, yang menangani menu hamburger, konfirmasi hapus baris tabel, filter tabel real-time, serta validasi form. Halaman HTML dan stylesheet lama disesuaikan (id, class, dan gaya pendukung) agar dapat dikendalikan oleh JavaScript.
+Proyek **SIMPUS-Mini** (Sistem Perpustakaan Mini) pada Jobsheet 6 melanjutkan front-end dari Jobsheet 5 dengan memindahkan sumber data tabel keluar dari HTML. Halaman `buku/list.html` dan `anggota/list.html` tidak lagi menulis baris tabel secara manual: `<tbody>` dibiarkan kosong lalu diisi oleh JavaScript melalui `fetch` + `async/await` dari berkas JSON di folder `data/`. Pola ini adalah pengganti sementara untuk API/server sungguhan yang baru tersedia mulai Jobsheet 8.
 
 ---
 
 ## 📜 Histori Pengerjaan
 
-### 1. Membuat Struktur Jobsheet 5
+### 1. Membuat Struktur Jobsheet 6
 
-Struktur folder `jobsheet-05/` disiapkan sebagai kelanjutan jobsheet sebelumnya. Halaman HTML, stylesheet, dan dokumen disalin dari Jobsheet 4, lalu ditambahkan folder baru `assets/js/` beserta berkas `app.js` sebagai tempat seluruh interaktivitas. Pada tahap ini `app.js` masih kosong dan belum ditautkan ke halaman.
+Struktur folder `jobsheet-06/` disiapkan sebagai kelanjutan Jobsheet 5. Halaman HTML, stylesheet, dan dokumen disalin dari Jobsheet 5, lalu ditambahkan folder baru `data/` untuk menampung sumber data JSON.
 
 ### 2. Apa yang Berubah di File HTML?
 
-Beberapa penanda ditambahkan ke HTML agar elemen mudah dipilih oleh JavaScript:
+Halaman daftar disesuaikan agar siap diisi JavaScript:
 
-- **Menu hamburger**: checkbox hack (`<input type="checkbox" id="nav-toggle">` + `<label for="nav-toggle">`) diganti menjadi `<button type="button" id="nav-toggle-btn" class="nav-toggle-label" aria-label="Menu">&#9776;</button>`.
-- **Kolom pencarian**: halaman `buku/list.html` dan `anggota/list.html` ditambah `<div class="search-box">` berisi `<input id="search-input">`.
-- **Tombol hapus**: setiap tombol Hapus diberi class `btn-hapus` agar bisa dipilih dengan `querySelectorAll`.
-- **Form tambah**: form diberi penanda `id="form-tambah"` (pada `anggota/tambah.html`) dan `class="form-tambah"` (pada `buku/tambah.html`) sebagai target validasi.
+- `<tbody>` pada `buku/list.html` dan `anggota/list.html` dikosongkan.
+- Ditambahkan elemen `<p id="loading-indicator">` yang tampil selama data diambil.
+- `<script>` untuk berkas render tabel ditambahkan setelah `app.js`.
 
-### 3. CSS Pendukung Fitur JavaScript
+### 3. Data JSON: buku.json & anggota.json
 
-File `style.css` disesuaikan agar mendukung fitur baru:
+Dua berkas JSON dibuat sebagai sumber data: `data/buku.json` berisi 10 objek buku dan `data/anggota.json` berisi 4 objek anggota. Struktur kuncinya mengikuti kolom tabel yang sudah ada (judul, pengarang, tahun, stok, dan no_anggota, nama, alamat, no_hp).
 
-- Aturan `.nav-toggle { display: none; }` dihapus karena checkbox hack sudah tidak dipakai.
-- `.nav-toggle-label` ditambah `background: none` dan `border: none` supaya tombol hamburger tampil rapi.
-- Blok media query yang sebelumnya dikomentari (`960px`, `480px`, dan `1400px`) diaktifkan kembali.
-- Ditambahkan `header nav.nav-open { display: block; }` sebagai kelas yang di-toggle oleh JavaScript.
-- Ditambahkan gaya `.error` untuk pesan validasi dan `.search-box` untuk kolom pencarian.
+### 4. JS: Mengambil & Menampilkan Daftar Buku
 
-### 4. JS: Menu Hamburger
+Fungsi `muatDaftarBuku()` dibuat untuk mengambil `data/buku.json` lewat `fetch`, memeriksa `res.ok`, mem-parse JSON, lalu membuat baris tabel satu per satu. Loading indicator ditampilkan sebelum pengambilan data dan disembunyikan di blok `finally`.
 
-Fungsi `initNavToggle()` dibuat di `app.js`. Fungsi ini mengambil tombol `#nav-toggle-btn` dan elemen `header nav`, lalu pada event `click` menjalankan `nav.classList.toggle("nav-open")`. Berkas `app.js` dipindahkan dari lokasi awal yang keliru (`assets/css/js/app.js`) ke lokasi yang benar, yaitu `assets/js/app.js`.
+### 5. JS: Mengambil & Menampilkan Daftar Anggota
 
-### 5. JS: Konfirmasi Hapus
+Pola yang sama diterapkan untuk data anggota lewat `muatDaftarAnggota()`. Kedua fungsi menangani kegagalan dengan `try/catch` dan menampilkan pesan error di dalam tabel bila pengambilan data gagal.
 
-Fungsi `initHapusConfirm()` menambahkan listener `click` ke setiap tombol `.btn-hapus`. Saat diklik, baris terdekat dicari dengan `btn.closest("tr")`, judul diambil dari sel pertama (`querySelector("td")`), lalu ditampilkan dialog `confirm()`. Jika pengguna menyetujui, baris dihapus dengan `row.remove()`.
+### 6. JS: Event Delegation pada Tombol Hapus
 
-### 6. JS: Filter Tabel Real-Time
+Karena baris tabel sekarang dibuat setelah halaman selesai dimuat, listener tombol Hapus tidak lagi bisa dipasang per tombol. `initHapusConfirm()` diubah memakai **event delegation**: satu listener dipasang di `document`, lalu `e.target.closest(".btn-hapus")` menyaring klik yang relevan.
 
-Fungsi `initTableFilter()` memasang listener `keyup` pada input `#search-input`. Setiap kali pengguna mengetik, seluruh baris `tbody tr` dibandingkan dengan kata kunci, dan baris yang tidak cocok disembunyikan dengan `row.style.display = "none"`. Filter berjalan secara real-time tanpa memuat ulang halaman.
+### 7. Menjalankan Lewat Server Lokal (CORS)
 
-### 7. JS: Validasi Form
-
-Validasi form ditambahkan melalui tiga bagian:
-
-- `tampilkanError(input, pesan)` — menyisipkan `<span class="error">` berisi pesan tepat setelah field.
-- `hapusError(input)` — menghapus pesan error yang sudah ada.
-- `initValidasiForm()` — menangani event `submit` dan mencegah pengiriman (`e.preventDefault()`) bila ada field yang tidak valid. Field yang divalidasi: judul/nama wajib diisi, pengarang wajib diisi, tahun terbit 1900–2026, dan stok tidak negatif.
+`fetch()` ke berkas lokal diblokir bila halaman dibuka lewat `file://`. Karena itu proyek dijalankan lewat server lokal (`php -S localhost:8000` atau Live Server).
 
 ### 8. Rangkuman & Latihan Lanjutan
 
-Tahap akhir berisi penyempurnaan dan latihan lanjutan:
+Tahap akhir berisi penyempurnaan dan latihan opsional:
 
-- **Inisialisasi terpusat** — pemanggilan `initNavToggle()`, `initHapusConfirm()`, `initTableFilter()`, dan `initValidasiForm()` dipindahkan ke satu listener `DOMContentLoaded`, sehingga blok `<script>` inline di setiap halaman dihapus.
-- **Perbaikan path script** — halaman di dalam folder `buku/` dan `anggota/` memakai `../assets/js/app.js` (sebelumnya keliru `assets/js/app.js`).
-- **Animasi menu** — pada layar mobile `header nav` memakai `max-height: 0`, `overflow: hidden`, dan `transition: max-height 0.35s ease`, sedangkan `.nav-open` menaikkan `max-height` sehingga menu terbuka/tertutup dengan efek geser halus.
-- **Filter satu kolom** — pencarian dibatasi hanya pada kolom Judul dengan `row.querySelector("td")`, bukan seluruh teks baris.
-- **Counter baris** — fungsi `updateCounter()` menampilkan teks "Menampilkan X dari Y buku/anggota" di atas tabel dan diperbarui setiap kali filter atau hapus dijalankan.
-- **Refactor validasi** — aturan validasi disimpan dalam array `aturanValidasi` (berisi `selector`, `cek`, dan `pesan`) lalu dijalankan dengan `forEach`, menggantikan blok `if` terpisah per field.
-- **Validasi ISBN** — field ISBN yang tidak wajib diisi (sesuai jobsheet-01 §4.4) kini divalidasi agar hanya menerima angka dan tanda hubung melalui pola `/^[0-9-]+$/`.
-- **Perbaikan label pencarian anggota** — teks "Cari Judul Buku" pada halaman anggota diperbaiki menjadi "Cari Anggota".
+- **Refactor fungsi generik** — `buku.js` dan `anggota.js` digabung menjadi satu berkas `tabel.js` berisi `muatTabelData()`. Sumber data dan daftar kolom dibaca dari atribut `data-sumber` dan `data-kolom` pada `<table id="tabel-data">`, sehingga satu fungsi dapat melayani kedua halaman.
+- **Tombol Muat Ulang** — tombol `#btn-muat-ulang` ditambahkan di halaman Daftar Buku untuk memanggil ulang `muatTabelData()`. Fungsi ini mengosongkan `<tbody>` terlebih dahulu, jadi aman dipanggil berkali-kali.
+- **Kolom Kategori** — `data/buku.json` ditambah kunci `kategori`, lalu `<th>Kategori</th>` dan urutan kolom pada `data-kolom` disesuaikan.
+- **Uji event delegation** — `console.log(e.target)` sempat ditambahkan di awal `initHapusConfirm` untuk mengamati event klik di seluruh halaman, lalu dihapus kembali setelah pengujian.
+- **Uji delay** — nilai `DELAY_SIMULASI` dinaikkan sementara dari 600 menjadi 3000 ms untuk mengamati loading indicator pada koneksi lambat, lalu dikembalikan ke 600.
 
 ---
 
 ## ✅ Kesimpulan
 
-Jobsheet 5 berhasil menambahkan lapisan **interaktivitas JavaScript** pada proyek SIMPUS-Mini. Empat fitur utama — menu hamburger, konfirmasi hapus, filter tabel real-time, dan validasi form — diimplementasikan dalam satu berkas `app.js` yang diinisialisasi terpusat lewat `DOMContentLoaded`. Penyempurnaan akhir berupa animasi CSS, counter baris, refactor validasi berbasis array, dan validasi ISBN menunjukkan penerapan konsep manipulasi DOM, event handling, serta pemisahan tanggung jawab antara struktur (HTML), tampilan (CSS), dan perilaku (JavaScript).
+Jobsheet 6 memindahkan sumber data tabel SIMPUS-Mini dari HTML statis ke berkas JSON yang diambil secara asinkron lewat `fetch`. Rendering tabel, loading indicator, dan penanganan error ditangani di sisi klien, sementara event delegation memastikan tombol pada baris dinamis tetap berfungsi. Refactor menjadi fungsi generik menunjukkan bahwa pola fetch-render dapat dipakai ulang untuk berbagai bentuk data tanpa menggandakan kode.

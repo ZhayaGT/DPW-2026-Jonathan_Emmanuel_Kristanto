@@ -48,4 +48,11 @@ function muatTabelData() {
     })();
 }
 
-document.addEventListener("DOMContentLoaded", muatTabelData);
+document.addEventListener("DOMContentLoaded", function () {
+    muatTabelData();
+
+    const btnMuatUlang = document.getElementById("btn-muat-ulang");
+    if (btnMuatUlang) {
+        btnMuatUlang.addEventListener("click", muatTabelData);
+    }
+});
