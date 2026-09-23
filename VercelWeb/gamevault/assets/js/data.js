@@ -26,6 +26,22 @@ function buatId(daftar) {
     })) + 1;
 }
 
+// Ambil dari localStorage; kalau belum ada, baca JSON lalu simpan.
+// url relatif terhadap halaman yang memanggil.
+async function ambilAwal(key, url) {
+    const tersimpan = ambilLokal(key);
+    if (tersimpan) return tersimpan;
+
+    const res = await fetch(url);
+    if (!res.ok) {
+        throw new Error("Gagal mengambil " + url + " (status " + res.status + ")");
+    }
+
+    const data = await res.json();
+    simpanLokal(key, data);
+    return data;
+}
+
 function teksAman(nilai) {
     return String(nilai)
         .replace(/&/g, "&amp;")
