@@ -177,9 +177,48 @@ function initValidasiForm() {
 }
 
 /* ===== Inisialisasi Terpusat ===== */
+/* ===== 6. Ringkasan Beranda ===== */
+async function initRingkasan() {
+    const kotakGame = document.getElementById("total-game");
+    if (!kotakGame) return;
+
+    let daftarGame;
+    let daftarReview;
+
+    try {
+        daftarGame = await ambilAwal(KEY_GAMES, "data/game.json");
+        daftarReview = await ambilAwal(KEY_REVIEWS, "data/review.json");
+    } catch (err) {
+        // Biarkan angka statis di HTML kalau data belum bisa dibaca.
+        console.error("Gagal memuat ringkasan:", err);
+        return;
+    }
+
+    const genreUnik = [];
+    daftarGame.forEach(function (game) {
+        if (game.genre && genreUnik.indexOf(game.genre) === -1) {
+            genreUnik.push(game.genre);
+        }
+    });
+
+    let jumlahRating = 0;
+    daftarGame.forEach(function (game) {
+        jumlahRating += Number(game.rating) || 0;
+    });
+    const rataRata = daftarGame.length
+        ? (jumlahRating / daftarGame.length).toFixed(1)
+        : "0.0";
+
+    kotakGame.textContent = daftarGame.length;
+    document.getElementById("total-review").textContent = daftarReview.length;
+    document.getElementById("total-genre").textContent = genreUnik.length;
+    document.getElementById("rating-rata").textContent = rataRata;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     initNavToggle();
     initHapusConfirm();
     initTableFilter();
     initValidasiForm();
+    initRingkasan();
 });
