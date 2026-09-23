@@ -1,10 +1,18 @@
 <?php
 $page_title = "Tambah Buku";
 include __DIR__ . '/../includes/header.php';
+
+$flash = $_SESSION['flash'] ?? null;
+unset($_SESSION['flash']);
 ?>
         <section>
             <h2>Tambah Buku</h2>
-            <form id="form-tambah" class="form-tambah">
+
+            <?php if ($flash): ?>
+                <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
+            <?php endif; ?>
+
+            <form id="form-tambah" class="form-tambah" method="post" action="proses_tambah.php">
                 <p>
                     <label for="judul">Judul</label><br>
                     <input type="text" id="judul" name="judul" required>
