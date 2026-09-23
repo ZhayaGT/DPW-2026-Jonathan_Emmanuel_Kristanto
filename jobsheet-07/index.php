@@ -28,5 +28,11 @@ $totalAnggota = count($_SESSION['anggota'] ?? []);
                 <h3>Statistik</h3>
                 <p><?php echo $totalBuku + $totalAnggota; ?></p>
             </article>
+
+            <form method="post" action="reset.php" onsubmit="return confirm('Kosongkan seluruh data sesi?');">
+                <p>
+                    <button type="submit">Reset Data</button>
+                </p>
+            </form>
         </section>
 <?php include __DIR__ . '/includes/footer.php'; ?>
