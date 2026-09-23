@@ -1,33 +1,57 @@
 <?php
 $page_title = "Daftar Buku";
 include __DIR__ . '/../includes/header.php';
+
+$flash = $_SESSION['flash'] ?? null;
+unset($_SESSION['flash']);
+$daftarBuku = $_SESSION['buku'] ?? [];
 ?>
         <section>
             <h2>Daftar Buku</h2>
+
+            <?php if ($flash): ?>
+                <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
+            <?php endif; ?>
+
             <div class="search-box">
                 <label for="search-input">Cari Judul Buku</label>
                 <input type="text" id="search-input" placeholder="Ketik judul buku...">
-                <button type="button" id="btn-muat-ulang">Muat Ulang</button>
             </div>
-            <p id="loading-indicator" style="display:none;">Memuat data...</p>
+
             <div class="table-responsive">
-                <table id="tabel-data" data-sumber="../data/buku.json" data-kolom="judul,pengarang,tahun,kategori,stok">
-                    <thead>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Judul</th>
+                        <th>Pengarang</th>
+                        <th>Tahun</th>
+                        <th>Kategori</th>
+                        <th>Stok</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($daftarBuku)): ?>
+                    <tr>
+                        <td colspan="6">Belum ada data buku. Silakan tambah lewat menu "Tambah Buku".</td>
+                    </tr>
+                    <?php else: ?>
+                        <?php foreach ($daftarBuku as $buku): ?>
                         <tr>
-                            <th>Judul</th>
-                            <th>Pengarang</th>
-                            <th>Tahun</th>
-                            <th>Kategori</th>
-                            <th>Stok</th>
-                            <th>Aksi</th>
+                            <td><?php echo $buku['judul']; ?></td>
+                            <td><?php echo $buku['pengarang']; ?></td>
+                            <td><?php echo $buku['tahun']; ?></td>
+                            <td><?php echo $buku['kategori']; ?></td>
+                            <td><?php echo $buku['stok']; ?></td>
+                            <td>
+                                <button type="button">Edit</button>
+                                <button type="button" class="btn-hapus">Hapus</button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
             </div>
         </section>
-<?php
-$extra_scripts = [$base . 'assets/js/tabel.js'];
-include __DIR__ . '/../includes/footer.php';
-?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
