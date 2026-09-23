@@ -1,9 +1,10 @@
 <?php
 $page_title = "Beranda";
 include __DIR__ . '/includes/header.php';
+require __DIR__ . '/includes/koneksi.php';
 
-$totalBuku = count($_SESSION['buku'] ?? []);
-$totalAnggota = count($_SESSION['anggota'] ?? []);
+$totalBuku = $pdo->query("SELECT COUNT(*) FROM buku")->fetchColumn();
+$totalAnggota = $pdo->query("SELECT COUNT(*) FROM anggota")->fetchColumn();
 ?>
         <section>
             <h2>Selamat Datang di Sistem Perpustakaan Mini</h2>
@@ -29,7 +30,7 @@ $totalAnggota = count($_SESSION['anggota'] ?? []);
                 <p><?php echo $totalBuku + $totalAnggota; ?></p>
             </article>
 
-            <form method="post" action="reset.php" onsubmit="return confirm('Kosongkan seluruh data sesi?');">
+            <form method="post" action="reset.php" onsubmit="return confirm('Kosongkan seluruh data buku dan anggota?');">
                 <p>
                     <button type="submit">Reset Data</button>
                 </p>
