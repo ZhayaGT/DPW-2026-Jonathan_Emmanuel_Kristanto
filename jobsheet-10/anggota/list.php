@@ -7,6 +7,9 @@ require __DIR__ . '/../includes/koneksi.php';
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
+// Latihan §6.4 no. 1 — tombol Hapus hanya ditampilkan untuk admin.
+$bolehHapus = ($_SESSION['role'] ?? '') === 'admin';
+
 $perPage = 5;
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $offset = ($page - 1) * $perPage;
@@ -72,10 +75,12 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                             <td><?php echo $anggota['no_hp']; ?></td>
                             <td>
                                 <a href="edit.php?id=<?php echo $anggota['id']; ?>" class="btn-edit">Edit</a>
+                                <?php if ($bolehHapus): ?>
                                 <form class="form-hapus" method="post" action="hapus.php">
                                     <input type="hidden" name="id" value="<?php echo $anggota['id']; ?>">
                                     <button type="submit" class="btn-hapus">Hapus</button>
                                 </form>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

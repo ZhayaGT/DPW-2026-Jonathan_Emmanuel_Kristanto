@@ -1,4 +1,9 @@
 <?php
+// Memulihkan sesi dari cookie "Ingat Saya" (latihan §6.4 no. 2) SEBELUM
+// status login dihitung, supaya navbar sudah benar pada permintaan pertama
+// setelah browser dibuka kembali.
+require_once __DIR__ . '/remember.php';
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

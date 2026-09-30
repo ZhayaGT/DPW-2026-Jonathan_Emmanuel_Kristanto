@@ -1,7 +1,6 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require __DIR__ . '/../includes/remember.php';
+
 if (isset($_SESSION['user_id'])) {
     header('Location: ../index.php');
     exit;
@@ -28,6 +27,10 @@ unset($_SESSION['flash']);
                 <p>
                     <label for="password">Password</label><br>
                     <input type="password" id="password" name="password" required>
+                </p>
+                <p>
+                    <label for="ingat_saya">Ingat saya</label><br>
+                    <input type="checkbox" id="ingat_saya" name="ingat_saya" value="1">
                 </p>
                 <p>
                     <button type="submit">Masuk</button>
