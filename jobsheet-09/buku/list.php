@@ -56,7 +56,7 @@ if ($keyword === '') {
                             <td><?php echo $buku['stok']; ?></td>
                             <td><?php echo $buku['tanggal_ditambahkan']; ?></td>
                             <td>
-                                <button type="button">Edit</button>
+                                <a href="edit.php?id=<?php echo $buku['id']; ?>" class="btn-edit">Edit</a>
                                 <button type="button" class="btn-hapus">Hapus</button>
                             </td>
                         </tr>
