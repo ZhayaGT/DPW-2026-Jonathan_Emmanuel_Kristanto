@@ -26,6 +26,20 @@ function initHapusConfirm() {
     });
 }
 
+// Konfirmasi ekstra sebelum Update (latihan 7.4 no. 1). Update tidak
+// destruktif seperti Delete, jadi konfirmasinya cukup menegaskan bahwa
+// perubahan akan disimpan ke database — pola event "submit" yang sama.
+function initEditConfirm() {
+    document.addEventListener("submit", function (e) {
+        const form = e.target;
+        if (!form.classList.contains("form-edit")) return;
+
+        if (!confirm("Simpan perubahan pada data ini?")) {
+            e.preventDefault();
+        }
+    });
+}
+
 function updateCounter() {
     const table = document.querySelector(".table-responsive table");
     if (!table) return;
@@ -144,4 +158,5 @@ document.addEventListener("DOMContentLoaded", function () {
     initHapusConfirm();
     initTableFilter();
     initValidasiForm();
+    initEditConfirm();
 });
