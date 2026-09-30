@@ -30,10 +30,12 @@ $totalAnggota = $pdo->query("SELECT COUNT(*) FROM anggota")->fetchColumn();
                 <p><?php echo $totalBuku + $totalAnggota; ?></p>
             </article>
 
+            <?php if ($sudahLogin): ?>
             <form method="post" action="reset.php" onsubmit="return confirm('Kosongkan seluruh data buku dan anggota?');">
                 <p>
                     <button type="submit">Reset Data</button>
                 </p>
             </form>
+            <?php endif; ?>
         </section>
 <?php include __DIR__ . '/includes/footer.php'; ?>

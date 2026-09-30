@@ -23,6 +23,18 @@ header nav a {
     font-weight: 500;
 }
 
+.auth-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #323232;
+}
+
+.auth-status a {
+    color: #323232;
+    text-decoration: underline;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
