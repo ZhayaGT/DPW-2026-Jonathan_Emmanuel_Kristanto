@@ -28,18 +28,20 @@ Dua bagian besar:
 
 ### Status persiapan
 
-Yang sudah selesai di dalam repo (tidak perlu dikerjakan lagi):
+Yang **sudah selesai** di dalam repo (tidak perlu dikerjakan lagi):
 
 - `includes/koneksi.php` membaca kredensial dari environment variable, dengan
   nilai lokal sebagai cadangan — `php -S localhost:8000` tetap jalan tanpa
   konfigurasi tambahan.
-- `Dockerfile` + `docker/start.sh` + `.dockerignore` siap dipakai Render.
+- `Dockerfile`, `docker/start.sh`, dan `.dockerignore` siap dipakai Render.
 - `render.yaml` di root repo (Blueprint) sudah lolos validasi skema resmi
   Render.
 - Image Docker diuji otomatis di GitHub Actions setiap kali isi `jobsheet-10/`
-  berubah (`.github/workflows/docker-smoke.yml`).
+  berubah: image dibangun, container melayani `PORT=10000`, beranda membaca
+  database, lalu registrasi → login → tambah buku diverifikasi sampai ke isi
+  PostgreSQL.
 
-Yang **hanya bisa** dikerjakan dengan akunmu (Bagian A dan B di bawah):
+Yang **hanya bisa dikerjakan dengan akunmu** (Bagian A dan B di bawah):
 membuat project Supabase, mengambil connection string, dan membuat service di
 Render.
 
