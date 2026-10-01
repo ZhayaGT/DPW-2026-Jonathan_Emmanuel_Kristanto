@@ -16,10 +16,14 @@ Panduan singkat mengenai struktur dan fitur proyek **SIMPUS-Mini** (Sistem Perpu
 jobsheet-10/
 ├── index.php                 # Beranda (publik) + ringkasan + tombol Reset (khusus admin)
 ├── reset.php                 # Kosongkan tabel buku & anggota — wajib login + role admin
+├── Dockerfile                # Image PHP+Apache untuk hosting di Render
+├── docker/
+│   └── start.sh              # Apache mengikuti port dari Render ($PORT)
+├── .dockerignore             # Berkas yang tidak ikut ke dalam image
 ├── includes/
 │   ├── header.php            # Bagian atas HTML + navbar dinamis + status login
 │   ├── footer.php            # Bagian bawah HTML + footer
-│   ├── koneksi.php           # Koneksi PDO driver pgsql
+│   ├── koneksi.php           # Koneksi PDO driver pgsql (kredensial dari env var)
 │   ├── auth.php              # Guard clause: halaman wajib login
 │   └── remember.php          # Pemulihan sesi dari cookie "Ingat Saya"
 ├── auth/
@@ -55,9 +59,13 @@ jobsheet-10/
 │   └── jawaban.md            # Jawaban soal jobsheet
 ├── Infografis.png            # Infografis proyek
 ├── Dokumentasi/
-│   └── PANDUAN.md            # Dokumentasi ini
+│   ├── PANDUAN.md            # Dokumentasi ini
+│   └── DEPLOY.md             # Panduan hosting: Supabase + Render
 └── README.md                 # Laporan pengerjaan jobsheet
 ```
+
+Di root repo juga ada **`render.yaml`** — Blueprint Render untuk web service
+`simpus-mini` (Docker, plan Free, region Singapore).
 
 ## 🧭 Penjelasan Folder
 
@@ -205,9 +213,26 @@ Lalu buka `http://localhost:8000/index.php`. **Akun pertama harus dibuat sendiri
 UPDATE users SET role = 'admin' WHERE username = 'username_anda';
 ```
 
+Untuk memakai database Supabase tanpa mengubah kode, cukup isi environment
+variable sebelum menjalankan server:
+
+```bash
+DATABASE_URL='postgresql://postgres.<ref>:PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres' \
+  php -S localhost:8000
+```
+
+## ☁️ Hosting (Supabase + Render)
+
+Aplikasi disiapkan untuk di-hosting gratis: **web** di Render (Docker, plan
+Free) dan **database** di Supabase (PostgreSQL terkelola). Berkasnya:
+`Dockerfile`, `docker/start.sh`, `.dockerignore`, dan `render.yaml` di root
+repo. Langkah lengkapnya ada di **[`DEPLOY.md`](DEPLOY.md)**.
+
 ## 📌 Catatan
 
 - Data tetap **persisten** di PostgreSQL; menutup browser tidak menghapusnya.
 - Tabel `users` **tidak** ikut dikosongkan oleh tombol Reset Data (hanya `buku` dan `anggota`), supaya akun tidak hilang saat data contoh dibersihkan.
 - `sql/migrasi_json.php` mengisi tabel `buku` dari `jobsheet-06/data/buku.json`; menjalankannya dua kali akan menggandakan data.
 - Audit keamanan menyeluruh (XSS, CSRF, session fixation) direncanakan pada Jobsheet 11. Yang **belum** ada di jobsheet ini: token CSRF pada form POST, dan `session_regenerate_id()` setelah login.
+- **Kredensial database tidak ada di dalam kode.** `includes/koneksi.php` membacanya dari environment variable (`DATABASE_URL`, atau `DB_HOST`/`DB_PORT`/`DB_NAME`/`DB_USER`/`DB_PASS`), dengan nilai lokal sebagai cadangan. Repo ini publik, jadi password tidak boleh ikut ter-commit.
+- Di hosting, sesi PHP disimpan di filesystem sementara milik container. Saat Render me-restart atau menidurkan instance (15 menit tanpa trafik), sesi hilang dan petugas perlu login ulang — data di Supabase tetap utuh.

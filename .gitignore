@@ -1,0 +1,9 @@
+# Rahasia & berkas lokal — jangan ikut ter-commit.
+# Repo ini publik: kredensial database hanya lewat environment variable.
+.env
+.env.*
+*.env
+
+# Berkas sistem
+.DS_Store
+Thumbs.db

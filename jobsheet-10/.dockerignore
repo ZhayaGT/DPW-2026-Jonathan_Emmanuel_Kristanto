@@ -1,0 +1,10 @@
+# Berkas yang tidak ikut ke dalam image.
+#
+# Konteks build adalah folder jobsheet-10, jadi pola di bawah relatif
+# terhadap folder itu.
+.git
+.dockerignore
+Dokumentasi/
+docs/
+README.md
+Infografis.png

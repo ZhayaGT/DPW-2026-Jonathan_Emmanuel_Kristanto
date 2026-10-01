@@ -14,10 +14,14 @@
 jobsheet-10/
 ├── index.php                 # Beranda (publik) + ringkasan + tombol Reset (admin)
 ├── reset.php                 # TRUNCATE tabel buku & anggota — wajib login + role admin
+├── Dockerfile                # BARU — image PHP+Apache untuk hosting Render
+├── docker/
+│   └── start.sh              # BARU — Apache mengikuti port dari Render ($PORT)
+├── .dockerignore             # BARU — berkas yang tidak ikut ke image
 ├── includes/
 │   ├── header.php            # Navbar dinamis + status login; memulihkan sesi "Ingat Saya"
 │   ├── footer.php            # Bagian bawah HTML + footer
-│   ├── koneksi.php           # Koneksi PDO driver pgsql
+│   ├── koneksi.php           # Koneksi PDO driver pgsql (kredensial dari env var)
 │   ├── auth.php              # BARU — guard clause: wajib login
 │   └── remember.php          # BARU — latihan §6.4 no. 2, pemulihan sesi dari cookie
 ├── auth/                     # BARU — seluruh folder
@@ -49,8 +53,11 @@ jobsheet-10/
 │   └── jawaban.md            # Jawaban soal jobsheet
 ├── Infografis.png            # Infografis proyek
 ├── Dokumentasi/
-│   └── PANDUAN.md            # Panduan proyek
+│   ├── PANDUAN.md            # Panduan proyek
+│   └── DEPLOY.md             # BARU — panduan Supabase + hosting Render
 └── README.md                 # Laporan ini
+
+render.yaml                   # BARU (di root repo) — Blueprint Render untuk jobsheet-10
 ```
 
 ## 📝 Ringkasan Proyek
@@ -111,6 +118,18 @@ Label footer diperbarui dari "Jobsheet 9" menjadi "Jobsheet 10".
 3. **Pembatas percobaan login gagal** — `proses_login.php` menghitung kegagalan di `$_SESSION` (sesuai petunjuk latihan). Setelah 5 kegagalan, login dikunci 60 detik; selama terkunci, permintaan ditolak **sebelum** menyentuh database. Sisa percobaan ditampilkan agar pengguna tahu.
 4. **Uji guard saat database mati** — dibuktikan dengan menjalankan proyek pada salinan sementara yang diarahkan ke port database yang tidak ada: halaman terkunci tetap mengembalikan HTTP 302 ke halaman Login, sementara `index.php` menampilkan pesan kegagalan koneksi. Ini menunjukkan guard berjalan **sebelum** kode yang membutuhkan database. (Mematikan layanan PostgreSQL sungguhan memerlukan `sudo`, jadi pengujian dilakukan dengan cara setara.)
 
+### 8. Persiapan Hosting: Supabase + Render
+
+Tahap memindahkan aplikasi dari `php -S localhost:8000` ke hosting gratis, dengan database PostgreSQL Supabase. Panduan langkah demi langkah ada di **`Dokumentasi/DEPLOY.md`**; yang berubah di dalam kode hanya dua berkas ditambah tiga berkas baru.
+
+**`includes/koneksi.php` — kredensial pindah ke environment variable.** Sebelumnya host, nama database, dan password ditulis langsung di berkas. Itu tidak bisa dibawa ke hosting karena dua alasan: repo ini publik, dan image Docker memuat setiap berkas yang di-`COPY`, sehingga password yang tertulis di kode akan ikut ter-push ke GitHub dan tersimpan di dalam image. Sekarang nilainya dibaca dari `DATABASE_URL` (string koneksi penuh dari Supabase), atau dari `DB_HOST`/`DB_PORT`/`DB_NAME`/`DB_USER`/`DB_PASS`, dengan nilai lokal sebagai cadangan — jadi `php -S localhost:8000` tetap jalan tanpa konfigurasi apa pun. Setelan SSL (`sslmode`) juga ikut dibaca: PostgreSQL lokal di mesin ini berjalan tanpa SSL sedangkan Supabase mewajibkannya, sehingga satu DSN dengan `sslmode=prefer` benar untuk keduanya (`DB_SSLMODE=require` tersedia bila ingin memaksa).
+
+**`Dockerfile` + `docker/start.sh` — Render tidak punya runtime PHP.** Render hanya menyediakan runtime native untuk Node, Python, Ruby, Go, Rust, dan Elixir; PHP harus lewat Docker. Dockerfile memakai image resmi `php:8.4-apache-bookworm` dan menambahkan satu ekstensi yang dibutuhkan proyek, `pdo_pgsql` (driver `pgsql` bawaan tidak dipakai karena koneksi lewat PDO). `docker/start.sh` menggeser port Apache dari 80 ke nilai `$PORT` yang diberikan Render, karena Render meneruskan trafik ke port tersebut, bukan ke port 80.
+
+**`render.yaml` (root repo) — Blueprint.** Repo ini berisi sepuluh folder jobsheet, jadi Dockerfile dan konteks build ditunjuk eksplisit (`dockerfilePath` dan `dockerContext` ke `./jobsheet-10`) dan `buildFilter` membatasi redeploy hanya ketika berkas di bawah `jobsheet-10/` berubah. Variabel `DATABASE_URL` diberi tanda `sync: false` supaya nilainya **tidak** disimpan di repo melainkan diminta lewat dashboard Render.
+
+Pemilihan layanan: Render dipilih karena satu-satunya hosting gratis yang memenuhi dua syarat sekaligus — menjalankan PHP **dan** boleh membuka koneksi keluar ke PostgreSQL port 5432. InfinityFree/Byet/TinkerHost hanya mengizinkan koneksi keluar ke port 3306 (MySQL), sedangkan Vercel, Netlify, dan GitHub Pages tidak menjalankan PHP sama sekali.
+
 ---
 
 ## 🔧 Penyesuaian dari Jobsheet Sebelumnya
@@ -134,7 +153,7 @@ psql -d simpus_mini -f sql/03_users.sql
 psql -d simpus_mini -f sql/04_remember_token.sql
 ```
 
-Autentikasi PostgreSQL di mesin ini memakai `trust` untuk koneksi lokal, sehingga kredensial `postgres`/`postgres` di `koneksi.php` langsung berfungsi tanpa mengatur password.
+Autentikasi PostgreSQL di mesin ini memakai `trust` untuk koneksi lokal, sehingga nilai cadangan `postgres`/`postgres` di `koneksi.php` langsung berfungsi tanpa mengatur password.
 
 ## 🚀 Cara Menjalankan
 
@@ -149,6 +168,17 @@ UPDATE users SET role = 'admin' WHERE username = 'username_anda';
 ```
 
 Untuk mengisi data contoh buku dari Jobsheet 6: `php sql/migrasi_json.php`.
+
+Untuk menjalankan versi yang memakai database Supabase (tanpa mengubah kode):
+
+```bash
+DATABASE_URL='postgresql://postgres.<ref>:PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres' \
+  php -S localhost:8000
+```
+
+## ☁️ Hosting (Supabase + Render)
+
+Aplikasi sudah disiapkan untuk di-hosting gratis di Render dengan database Supabase. Berkas yang dipakai: `Dockerfile`, `docker/start.sh`, `.dockerignore`, dan `render.yaml` di root repo. Langkah lengkapnya (membuat project Supabase, menjalankan skema, mengambil connection string, sampai deploy dan verifikasi) ada di **[`Dokumentasi/DEPLOY.md`](Dokumentasi/DEPLOY.md)**.
 
 ## ✅ Verifikasi
 
@@ -174,6 +204,14 @@ Seluruh alur diuji pada server `php -S` dengan akun & data uji sementara (dibuat
 | "Ingat Saya" tanpa sesi | Sesi dipulihkan pada permintaan pertama (navbar + halaman terkunci); token diputar (hash berubah) |
 | Logout | `remember_token` jadi NULL; sesi tidak pulih; halaman terkunci kembali 302 |
 | Database tidak terjangkau | Halaman terkunci tetap 302 ke Login; `index.php` menampilkan pesan gagal koneksi |
+| Konfigurasi database via `DATABASE_URL` | `index.php`, daftar buku, registrasi, login, tambah buku, dan logout berjalan sama seperti sebelumnya (diuji dengan `php -S` + env var) |
+| Konfigurasi database via env terpisah | `DB_HOST`/`DB_NAME`/`DB_USER`/`DB_PASS` menghasilkan koneksi yang sama |
+| `DATABASE_URL` salah bentuk | Pesan "DATABASE_URL tidak bisa dibaca…", bukan error PHP |
+| Host lokal vs host lain | `127.0.0.1` → `sslmode=prefer` (koneksi berhasil ke PostgreSQL lokal tanpa SSL); host non-lokal → `sslmode=require` (ditolak oleh server tanpa SSL, dan `DB_SSLMODE` bisa menimpanya) |
+| Database tidak terjangkau (versi hosting) | Pengunjung melihat pesan umum "Koneksi database gagal…"; rincian (host, nama pengguna) hanya masuk log server |
+| Perintah `sed` di `docker/start.sh` | Diuji pada `ports.conf` dan `000-default.conf` asli dari paket Apache Debian bookworm: `Listen 80` → `Listen 10000`, `<VirtualHost *:80>` → `<VirtualHost *:10000>`, aman dijalankan dua kali |
+| `render.yaml` | Nol error terhadap skema resmi Render (`https://render.com/schema/render.yaml.json`); validator yang sama menolak contoh sengaja-rusak (kontrol negatif) |
+| `Dockerfile` | Belum bisa di-`docker build` di mesin ini — daemon Docker perlu hak akses root (`sudo`) dan `docker --version` saja tidak cukup. Build pertama diverifikasi lewat log deploy Render. |
 
 ## ✅ Kesimpulan
 

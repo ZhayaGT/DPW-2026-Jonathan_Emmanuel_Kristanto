@@ -1,0 +1,32 @@
+# Blueprint Render untuk SIMPUS-Mini (jobsheet-10).
+#
+# Cara pakai: Render Dashboard → New → Blueprint → pilih repo ini.
+# Render membaca berkas ini dan menampilkan satu web service "simpus-mini",
+# lalu meminta nilai DATABASE_URL (bertanda sync: false supaya password
+# Supabase tidak pernah ikut masuk ke repo publik ini).
+#
+# Repo ini memuat sepuluh folder jobsheet, jadi Dockerfile dan konteks build
+# ditunjuk eksplisit — keduanya ditulis relatif terhadap root repo, sesuai
+# cara Render membaca dua field itu. buildFilter membatasi deploy ulang hanya
+# pada perubahan di dalam folder jobsheet-10.
+#
+# Database TIDAK didefinisikan di sini — proyek memakai PostgreSQL Supabase.
+services:
+  - type: web
+    name: simpus-mini
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: master
+    dockerfilePath: ./jobsheet-10/Dockerfile
+    dockerContext: ./jobsheet-10
+    healthCheckPath: /index.php
+    autoDeployTrigger: commit
+    buildFilter:
+      paths:
+        - jobsheet-10/**
+    envVars:
+      # String koneksi Supabase, contoh (Session pooler, port 5432):
+      # postgresql://postgres.abcdefghijklm:PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+      - key: DATABASE_URL
+        sync: false
