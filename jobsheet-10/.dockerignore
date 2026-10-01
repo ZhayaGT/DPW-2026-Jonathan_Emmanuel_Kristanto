@@ -1,10 +1,14 @@
 # Berkas yang tidak ikut ke dalam image.
 #
-# Konteks build adalah folder jobsheet-10, jadi pola di bawah relatif
-# terhadap folder itu.
+# Konteks build adalah folder jobsheet-10 (lihat render.yaml), jadi pola di
+# bawah relatif terhadap folder itu. Yang dikeluarkan hanyalah berkas yang
+# tidak dibutuhkan saat aplikasi berjalan — tanpa ini, isinya ikut tersalin
+# ke /var/www/html dan bisa diunduh siapa pun lewat alamat publik, misalnya
+# skema database di sql/.
 .git
 .dockerignore
 Dokumentasi/
 docs/
+sql/
 README.md
 Infografis.png
