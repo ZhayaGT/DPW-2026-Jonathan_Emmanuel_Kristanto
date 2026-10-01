@@ -26,6 +26,23 @@ Dua bagian besar:
 > `includes/koneksi.php` atau berkas lain yang di-commit. Kode di repo ini
 > sudah memakai pola itu (lihat [Bagian C](#c-cara-kerja-konfigurasi-database)).
 
+### Status persiapan
+
+Yang sudah selesai di dalam repo (tidak perlu dikerjakan lagi):
+
+- `includes/koneksi.php` membaca kredensial dari environment variable, dengan
+  nilai lokal sebagai cadangan — `php -S localhost:8000` tetap jalan tanpa
+  konfigurasi tambahan.
+- `Dockerfile` + `docker/start.sh` + `.dockerignore` siap dipakai Render.
+- `render.yaml` di root repo (Blueprint) sudah lolos validasi skema resmi
+  Render.
+- Image Docker diuji otomatis di GitHub Actions setiap kali isi `jobsheet-10/`
+  berubah (`.github/workflows/docker-smoke.yml`).
+
+Yang **hanya bisa** dikerjakan dengan akunmu (Bagian A dan B di bawah):
+membuat project Supabase, mengambil connection string, dan membuat service di
+Render.
+
 ---
 
 ## A. Supabase
@@ -183,10 +200,12 @@ konfigurasi tambahan:
 | 2 | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS` | fleksibel |
 | 3 | nilai default (`localhost`, `simpus_mini`, `postgres`/`postgres`) | mesin lokal |
 
-Setelan SSL: `DB_SSLMODE` (default `prefer`). Nilai `prefer` memakai SSL bila
-server mendukung dan jatuh ke koneksi biasa bila tidak — PostgreSQL lokal
-umumnya tanpa SSL, Supabase mewajibkan SSL, dan satu setelan ini benar untuk
-keduanya. Tambahkan `DB_SSLMODE=require` bila ingin memaksa SSL.
+Setelan SSL: `DB_SSLMODE`. Bila tidak diisi, nilainya ditentukan dari host —
+host lokal (`localhost`, `127.0.0.1`, `::1`) memakai `prefer` (SSL dipakai
+bila server menyediakannya), host lain memakai `require` (koneksi ditolak
+bila tidak terenkripsi). PostgreSQL lokal umumnya tanpa SSL dan Supabase
+mewajibkannya, jadi aturan ini benar untuk keduanya tanpa konfigurasi
+tambahan. Isi `DB_SSLMODE` hanya bila ingin menimpanya.
 
 ### Mengubah variabel di Render
 
@@ -221,7 +240,7 @@ deploy: kalau lokal bisa, sisa masalahnya hanya di sisi Render.
 | `tenant or user not found` | Username pooler salah | Username harus `postgres.<project-ref>` (perhatikan titik), bukan `postgres` |
 | `password authentication failed` | Password salah atau karakter khusus tidak di-encode | Periksa password A1; percent-encode `@ # ? &` dan spasi |
 | `connection refused` / `timeout` | Memakai host/port yang salah | Pakai **Session pooler** port `5432`, bukan `6543` atau host `db.<ref>.supabase.co` |
-| `server does not support SSL, but SSL was required` | `DB_SSLMODE=require` dipakai ke PostgreSQL lokal tanpa SSL | Hapus env var itu untuk pemakaian lokal |
+| `server does not support SSL, but SSL was required` | Host non-lokal (jadi `sslmode=require`) diarahkan ke PostgreSQL lokal tanpa SSL | Pakai `DB_HOST=localhost`/`127.0.0.1`, atau set `DB_SSLMODE=prefer` |
 | Deploy Render gagal di tahap build | Dockerfile/ekstensi gagal dibangun | Baca **Logs**; pastikan `dockerfilePath` = `./jobsheet-10/Dockerfile` dan `dockerContext` = `./jobsheet-10` |
 | Halaman putih / 500 setelah deploy | Error PHP | Cek **Logs** di Render |
 
