@@ -1,0 +1,97 @@
+name: Uji Docker (persiapan hosting Render)
+
+# Memverifikasi berkas yang dipakai Render: Dockerfile, docker/start.sh, dan
+# includes/koneksi.php yang membaca DATABASE_URL. Dijalankan di runner Linux
+# GitHub (mirip lingkungan build Render), karena mesin pengembang tidak
+# selalu punya akses daemon Docker.
+on:
+  push:
+    paths:
+      - 'jobsheet-10/**'
+      - '.github/workflows/docker-smoke.yml'
+  pull_request:
+    paths:
+      - 'jobsheet-10/**'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: simpus_mini
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Jalankan skema SQL (01 → 04)
+        run: |
+          for f in 01_buku_anggota 02_tanggal_ditambahkan 03_users 04_remember_token; do
+            echo "== $f.sql"
+            docker run --rm --network host \
+              -e PGPASSWORD=postgres \
+              -v "$PWD/jobsheet-10/sql:/sql:ro" \
+              postgres:16 \
+              psql -h 127.0.0.1 -U postgres -d simpus_mini -v ON_ERROR_STOP=1 -f "/sql/$f.sql"
+          done
+
+      - name: Build image
+        run: docker build -t simpus-mini ./jobsheet-10
+
+      - name: Jalankan container seperti di Render
+        run: |
+          docker run -d --name app --network host \
+            -e PORT=10000 \
+            -e DATABASE_URL='postgresql://postgres:postgres@127.0.0.1:5432/simpus_mini?sslmode=prefer' \
+            simpus-mini
+
+      - name: Tunggu aplikasi siap
+        run: |
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /tmp/index.html -w '%{http_code}' http://127.0.0.1:10000/index.php || true)
+            if [ "$code" = "200" ]; then echo "siap setelah ${i} percobaan"; exit 0; fi
+            sleep 2
+          done
+          echo "aplikasi tidak merespons"; docker logs app; exit 1
+
+      - name: Beranda membaca database
+        run: |
+          grep -q "Koneksi database gagal" /tmp/index.html && { echo "GAGAL: koneksi database"; exit 1; }
+          grep -q "Total Buku" /tmp/index.html
+          echo "OK: beranda dirender dari database"
+
+      - name: Alur registrasi, login, dan tambah buku
+        run: |
+          B=http://127.0.0.1:10000
+          curl -s -o /dev/null -w 'halaman terkunci: %{http_code} -> %{redirect_url}\n' "$B/anggota/list.php"
+          curl -s -c /tmp/c.txt -o /dev/null -w 'register: %{http_code}\n' \
+            -d 'nama=Uji CI&username=uji_ci&password=rahasia123' "$B/auth/proses_register.php"
+          curl -s -b /tmp/c.txt -c /tmp/c.txt -o /dev/null -w 'login: %{http_code}\n' \
+            -d 'username=uji_ci&password=rahasia123' "$B/auth/proses_login.php"
+          curl -s -b /tmp/c.txt -o /dev/null -w 'tambah buku: %{http_code}\n' \
+            -d 'judul=Buku Uji CI&pengarang=CI&tahun=2026&isbn=000&stok=1&kategori=Uji' \
+            "$B/buku/proses_tambah.php"
+          curl -s -b /tmp/c.txt -o /tmp/list.html "$B/buku/list.php"
+          grep -q "Buku Uji CI" /tmp/list.html && echo "OK: buku tampil di daftar"
+
+      - name: Data benar-benar masuk PostgreSQL
+        run: |
+          docker run --rm --network host -e PGPASSWORD=postgres postgres:16 \
+            psql -h 127.0.0.1 -U postgres -d simpus_mini -tAc \
+            "SELECT judul FROM buku WHERE judul = 'Buku Uji CI'" | grep -q "Buku Uji CI"
+          echo "OK: baris ditemukan di database"
+
+      - name: Log container (selalu)
+        if: always()
+        run: docker logs app || true
