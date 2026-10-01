@@ -180,6 +180,8 @@ DATABASE_URL='postgresql://postgres.<ref>:PASSWORD@aws-0-ap-southeast-1.pooler.s
 
 Aplikasi sudah disiapkan untuk di-hosting gratis di Render dengan database Supabase. Berkas yang dipakai: `Dockerfile`, `docker/start.sh`, `.dockerignore`, dan `render.yaml` di root repo. Langkah lengkapnya (membuat project Supabase, menjalankan skema, mengambil connection string, sampai deploy dan verifikasi) ada di **[`Dokumentasi/DEPLOY.md`](Dokumentasi/DEPLOY.md)**.
 
+Kesiapan image Docker diuji otomatis di GitHub Actions setiap kali berkas di dalam `jobsheet-10/` berubah — lihat `.github/workflows/docker-smoke.yml`. Alur yang dijalankan: bangun image → jalankan container dengan `PORT=10000` → pastikan beranda membaca database → registrasi, login, tambah buku → cek barisnya benar-benar masuk PostgreSQL.
+
 ## ✅ Verifikasi
 
 Seluruh alur diuji pada server `php -S` dengan akun & data uji sementara (dibuat lalu dihapus kembali setelah pengujian):
@@ -211,7 +213,7 @@ Seluruh alur diuji pada server `php -S` dengan akun & data uji sementara (dibuat
 | Database tidak terjangkau (versi hosting) | Pengunjung melihat pesan umum "Koneksi database gagal…"; rincian (host, nama pengguna) hanya masuk log server |
 | Perintah `sed` di `docker/start.sh` | Diuji pada `ports.conf` dan `000-default.conf` asli dari paket Apache Debian bookworm: `Listen 80` → `Listen 10000`, `<VirtualHost *:80>` → `<VirtualHost *:10000>`, aman dijalankan dua kali |
 | `render.yaml` | Nol error terhadap skema resmi Render (`https://render.com/schema/render.yaml.json`); validator yang sama menolak contoh sengaja-rusak (kontrol negatif) |
-| `Dockerfile` | Belum bisa di-`docker build` di mesin ini — daemon Docker perlu hak akses root (`sudo`) dan `docker --version` saja tidak cukup. Build pertama diverifikasi lewat log deploy Render. |
+| Build & jalankan image Docker | Diverifikasi di GitHub Actions (runner Linux, sama seperti lingkungan build Render) — `.github/workflows/docker-smoke.yml`: image berhasil dibangun, container melayani port `10000` (`siap setelah 2 percobaan`), beranda dirender dari database, registrasi/login/tambah buku berhasil, dan barisnya benar-benar ada di PostgreSQL. Mesin pengembang tidak dipakai karena daemon Docker di sini hanya bisa diakses root. |
 
 ## ✅ Kesimpulan
 
