@@ -267,7 +267,9 @@ DATABASE_URL='postgresql://postgres.<ref>:PASSWORD@aws-0-ap-southeast-1.pooler.s
   php -S localhost:8000
 
 # 2. Uji image Docker secara lokal (butuh Docker)
-docker build -t simpus-mini .
+#    Konteks build adalah folder jobsheet-10, jadi perintahnya dijalankan
+#    dari root repo:
+docker build -t simpus-mini jobsheet-10
 docker run --rm -p 10000:10000 \
   -e DATABASE_URL='postgresql://...' \
   simpus-mini
@@ -277,3 +279,7 @@ docker run --rm -p 10000:10000 \
 git add . && git commit -m "..." && git push
 # Render akan otomatis redeploy (autoDeployTrigger: commit)
 ```
+
+Kalau Docker di mesinmu tidak bisa dipakai, langkah 2 sudah berjalan otomatis
+di GitHub Actions: buka tab **Actions** repo → workflow **Uji Docker** →
+jalankan ulang lewat **Run workflow** bila perlu.
